@@ -515,20 +515,31 @@
         </button>
     </div>
 
-    <!-- სლაიდი 1: შემოთავაზება -->
-    <div id="slide-1" class="slide flex-col items-center justify-center flex-1 w-full gap-3">
-        <!-- === PREMIUM MOUNTED VIDEO CONTAINER (REPLACING EMOJI) === -->
-        <div class="w-40 h-40 rounded-2xl overflow-hidden border border-rose-500/40 shadow-[0_0_25px_rgba(255,23,68,0.25)] relative my-2">
-            <div class="absolute inset-0 bg-rose-500/10 pointer-events-none z-10"></div>
-            <video id="slide-1-video"
-              autoplay
+    <!-- სლაიდი 1: შემოთავაზება (დაპატარავდა gap-3.5-მდე, რათა დავიცვათ ბარათის ზომა) -->
+    <div id="slide-1" class="slide flex-col items-center justify-center flex-1 w-full gap-3.5">
+        <!-- პრემიუმ მომრგვალებული ვიდეო-ბლოკი - გაიზარდა w-40 h-40 (160px) ზომამდე -->
+        <div class="w-40 h-40 rounded-2xl overflow-hidden border border-rose-500/40 shadow-[0_0_25px_rgba(255,23,68,0.25)] relative my-1">
+            <video 
+              id="slide-1-video"
+              autoplay 
               loop 
               playsinline
-              class="w-full h-full object-cover">
+              class="w-full h-full object-cover"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                z-index: 0;
+                border-radius: inherit;
+                pointer-events: none;
+              ">
               <source src="date.mp4" type="video/mp4">
             </video>
         </div>
-        <!-- === END VIDEO CONTAINER === -->
+        
         <div class="text-xs uppercase tracking-[0.25em] text-rose-400/70"> SYSTEM INITIATIVE </div>
         <h1 class="text-3xl font-black tracking-widest uppercase bg-gradient-to-r from-white via-rose-100 to-rose-400 bg-clip-text text-transparent drop-shadow-[0_2px_15px_rgba(255,23,68,0.4)]">
            Will YOU DATE WITH ME? 🔥
@@ -536,7 +547,7 @@
         <p class="text-rose-200/40 text-xs tracking-wider uppercase">OVERRIDING MANUAL SELECTION. ENTER
             CONFIRMATION.</p>
 
-        <div id="btn-container" class="relative w-full min-h-[100px] flex flex-row gap-6 justify-center mt-10 pt-4">
+        <div id="btn-container" class="relative w-full min-h-[100px] flex flex-row gap-6 justify-center mt-6 pt-2">
             <!-- YES ქარდი -->
             <div id="yes-btn"
                  class="relative flex flex-col items-center justify-center w-[42%] py-2.5 px-5 rounded-2xl bg-zinc-950/40 border border-zinc-800/80 cursor-pointer transition-all duration-300 hover:border-emerald-500/80 hover:shadow-[0_0_25px_rgba(16,185,129,0.35)] group z-10">
@@ -701,66 +712,161 @@
                 class="absolute top-4 left-4 text-rose-400 hover:text-rose-200 text-xs tracking-wider flex items-center gap-1 font-mono cursor-pointer">
             [← BACK]
         </button>
-        <div class="mt-8">
-            <h3 class="text-lg font-bold text-rose-400 uppercase tracking-widest mb-4">> SELECT_CUISINE_VECT</h3>
-            <div class="grid grid-cols-2 gap-3 mb-10">
+        <div class="mt-8 flex-1 flex flex-col overflow-hidden">
+            <h3 class="text-lg font-bold text-rose-400 uppercase tracking-widest mb-1">> SELECT_CUISINE_VECT</h3>
+            <p class="text-rose-600/60 text-[10px] uppercase tracking-widest mb-4">Allocate Caloric Parameters</p>
+            
+            <div class="grid grid-cols-2 gap-x-3.5 gap-y-7 overflow-y-auto pr-1 max-h-[250px] pt-6 pb-2">
+                <!-- Pizza -->
                 <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
-                     class="select-card p-3 rounded-xl cursor-pointer text-xs font-bold uppercase">🍕 Pizza
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🍕
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Pizza</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">იტალიური კლასიკა, მდნარი ყველითა და სოუსით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">CHEESY • HOT</span>
                 </div>
+
+                <!-- Sushi -->
                 <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
-                     class="select-card p-3 rounded-xl cursor-pointer text-xs font-bold uppercase">🍣 Sushi
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🍣
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Sushi</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">უგემრიელესი როლები, ახალი ფუტურისტული არომატით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">RAW • FRESH</span>
                 </div>
+
+                <!-- Burgers -->
                 <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
-                     class="select-card p-3 rounded-xl cursor-pointer text-xs font-bold uppercase">🍔 Burgers
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🍔
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Burgers</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ორმაგი კოტლეტი, მდნარი ჩედარი და საიდუმლო სოუსი.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">JUICY • ELITE</span>
                 </div>
+
+                <!-- Pasta -->
                 <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
-                     class="select-card p-3 rounded-xl cursor-pointer text-xs font-bold uppercase">🍝 Pasta
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🍝
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Pasta</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ნაზი კარბონარა, დამზადებული ნამდვილი სიყვარულით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">CLASSIC • WARM</span>
                 </div>
+
+                <!-- Tacos -->
                 <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
-                     class="select-card p-3 rounded-xl cursor-pointer text-xs font-bold uppercase">🌮 Tacos
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🌮
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Tacos</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ხრაშუნა ტაკოები ცხარე, საინტერესო შიგთავსით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">SPICY • MEXICAN</span>
                 </div>
+
+                <!-- Ramen -->
                 <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
-                     class="select-card p-3 rounded-xl cursor-pointer text-xs font-bold uppercase">🍜 Ramen
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🍜
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Ramen</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">მდიდარი არომატული ბულიონი ნუდლსითა და კვერცხით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">UMAMI • RICH</span>
                 </div>
             </div>
         </div>
         <button onclick="playClickBeep(); closeSubMenu('food');"
-                class="w-full py-3 bg-gradient-to-r from-rose-600 to-pink-600 rounded-xl font-bold uppercase tracking-widest text-xs shadow-md mt-auto">
+                class="w-full py-3 bg-gradient-to-r from-rose-600 to-pink-600 rounded-xl font-bold uppercase tracking-widest text-xs shadow-md mt-4 flex-shrink-0">
             COMMIT_SELECTION
         </button>
     </div>
 
-    <!-- ფილმების მენიუ -->
+    <!-- ფილმების მენიუ (რეალური კავეას რეპერტუარი) -->
     <div id="sub-movies"
          class="hidden absolute inset-0 bg-[#120005]/95 p-6 flex-col justify-between z-20 rounded-3xl border border-rose-500/30 shadow-2xl backdrop-blur-2xl">
         <button onclick="playClickBeep(); closeSubMenu('movies');"
                 class="absolute top-4 left-4 text-rose-400 hover:text-rose-200 text-xs tracking-wider flex items-center gap-1 font-mono cursor-pointer">
             [← BACK]
         </button>
-        <div class="mt-8">
-            <h3 class="text-lg font-bold text-rose-400 uppercase tracking-widest mb-1">> RUNNING_CINEMA_CATALOG</h3>
-            <p class="text-rose-600/60 text-[10px] uppercase tracking-widest mb-4">Cavea Cinemas Feed</p>
-            <div class="grid grid-cols-1 gap-2 mb-10">
+        <div class="mt-8 flex-1 flex flex-col overflow-hidden">
+            <div class="flex items-center gap-2 mb-1 flex-shrink-0">
+                <h3 class="text-lg font-bold text-rose-400 uppercase tracking-widest">> RUNNING_CINEMA_CATALOG</h3>
+                <!-- მბჟუტავი წითელი ნეონის წერტილი (Live Indicator) -->
+                <span class="flex h-2 w-2 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                </span>
+            </div>
+            <p class="text-rose-600/60 text-[10px] uppercase tracking-widest mb-4 flex-shrink-0">Cavea Cinemas Live Feed [SECURE_IP]</p>
+            
+            <!-- ქარდების სკროლადი ბლოკი მობილურისთვის და დესკტოპისთვის -->
+            <div class="grid grid-cols-2 gap-x-3.5 gap-y-7 overflow-y-auto pr-1 max-h-[250px] pt-6 pb-2">
+                
+                <!-- ქარდი 1: Toy Story 5 -->
                 <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
-                     class="select-card p-3 rounded-xl cursor-pointer text-xs text-left uppercase font-semibold">🎬
-                    Avengers: Secret Wars
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950">
+                        <img src="https://images.unsplash.com/photo-1594787318286-3d835c1d207f?auto=format&fit=crop&w=100&q=80" 
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=TS5'" 
+                             alt="Toy Story 5" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Toy Story 5</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ვუდი და ბაზი ბრუნდებიან ახალი ტექნოლოგიური გამოწვევებით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">IMAX 3D • 18:00</span>
                 </div>
+
+                <!-- ქარდი 2: Scary Movie 6 -->
                 <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
-                     class="select-card p-3 rounded-xl cursor-pointer text-xs text-left uppercase font-semibold">🎬
-                    Project Hail Mary
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950">
+                        <img src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=100&q=80" 
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=SM6'" 
+                             alt="Scary Movie 6" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Scary Movie 6</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">საკულტო პაროდიული საშინელებათა ფრენჩაიზი ბრუნდება იუმორით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">კომედია • 20:30</span>
                 </div>
+
+                <!-- ქარდი 3: Masters of the Universe -->
                 <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
-                     class="select-card p-3 rounded-xl cursor-pointer text-xs text-left uppercase font-semibold">🎬 The
-                    Batman Part II
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950">
+                        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=100&q=80" 
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=MOTU'" 
+                             alt="Masters of the Universe" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Masters of the Universe</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">პრინცი ადამი ბრუნდება ეტერნიას დასაცავად სკელეტორისგან.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">Dolby Atmos • 22:00</span>
                 </div>
+
+                <!-- ქარდი 4: Supergirl -->
                 <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
-                     class="select-card p-3 rounded-xl cursor-pointer text-xs text-left uppercase font-semibold">🎬 Dune:
-                    Prophecy Special Block
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950">
+                        <img src="https://images.unsplash.com/photo-1531259683007-016a7b628fc3?auto=format&fit=crop&w=100&q=80" 
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=SG'" 
+                             alt="Supergirl" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Supergirl</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">კარა ზორ-ელი მოგზაურობს კოსმოსში სამართლიანობისთვის.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">ფენტეზი • 19:15</span>
                 </div>
+
             </div>
         </div>
         <button onclick="playClickBeep(); closeSubMenu('movies');"
-                class="w-full py-3 bg-gradient-to-r from-rose-600 to-pink-600 rounded-xl font-bold uppercase tracking-widest text-xs shadow-md mt-auto">
+                class="w-full py-3 bg-gradient-to-r from-rose-600 to-pink-600 rounded-xl font-bold uppercase tracking-widest text-xs shadow-md mt-4 flex-shrink-0">
             COMMIT_SELECTION
         </button>
     </div>
@@ -772,33 +878,69 @@
                 class="absolute top-4 left-4 text-rose-400 hover:text-rose-200 text-xs tracking-wider flex items-center gap-1 font-mono cursor-pointer">
             [← BACK]
         </button>
-        <div class="mt-8">
-            <h3 class="text-lg font-bold text-rose-400 uppercase tracking-widest mb-4">> ALLOCATE_OPERATIONS</h3>
-            <div class="grid grid-cols-1 gap-2.5 mb-10">
+        <div class="mt-8 flex-1 flex flex-col overflow-hidden">
+            <h3 class="text-lg font-bold text-rose-400 uppercase tracking-widest mb-1">> ALLOCATE_OPERATIONS</h3>
+            <p class="text-rose-600/60 text-[10px] uppercase tracking-widest mb-4">Select Target Atmospheric Parameters</p>
+            
+            <div class="grid grid-cols-2 gap-x-3.5 gap-y-7 overflow-y-auto pr-1 max-h-[250px] pt-6 pb-2">
+                <!-- Bowling -->
                 <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
-                     class="select-card p-2.5 rounded-xl cursor-pointer text-xs text-left uppercase font-semibold">🎳
-                    Bowling System Arena
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🎳
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Bowling</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">გააგორეთ კინეტიკური სფეროები ნეონურ არენაზე.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">ACTIVE • COMPETITIVE</span>
                 </div>
+
+                <!-- Billiards -->
                 <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
-                     class="select-card p-2.5 rounded-xl cursor-pointer text-xs text-left uppercase font-semibold">🎱
-                    Premium Billiards Club
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🎱
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Billiards</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ტაქტიკური და წყნარი თამაში სასიამოვნო გარემოში.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">FOCUS • CHILL</span>
                 </div>
+
+                <!-- PS5 Gaming -->
                 <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
-                     class="select-card p-2.5 rounded-xl cursor-pointer text-xs text-left uppercase font-semibold">🎮 PS5
-                    VIP Gaming Lounge
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🎮
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">PS5 Lounge</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ულტრა 4K ეკრანები და VIP კომფორტული სავარძლები.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">VIP • INTERACTIVE</span>
                 </div>
+
+                <!-- Park Stroll -->
                 <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
-                     class="select-card p-2.5 rounded-xl cursor-pointer text-xs text-left uppercase font-semibold">🚶
-                    Cinematic Park Stroll
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🚶
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Park Walk</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">მშვიდი და ესთეტიკური გასეირნება მატრიცულ ბილიკებზე.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">ROMANTIC • CALM</span>
                 </div>
+
+                <!-- Horse Riding -->
                 <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
-                     class="select-card p-2.5 rounded-xl cursor-pointer text-xs text-left uppercase font-semibold">🐴
-                    Horse Riding Mountain Tour
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🐴
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Horse Riding</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ულამაზესი მთის ხედები და კეთილშობილი ცხენები.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">OUTDOOR • EPIC</span>
                 </div>
             </div>
         </div>
         <button onclick="playClickBeep(); closeSubMenu('activities');"
-                class="w-full py-3 bg-gradient-to-r from-rose-600 to-pink-600 rounded-xl font-bold uppercase tracking-widest text-xs shadow-md mt-auto">
+                class="w-full py-3 bg-gradient-to-r from-rose-600 to-pink-600 rounded-xl font-bold uppercase tracking-widest text-xs shadow-md mt-4 flex-shrink-0">
             COMMIT_SELECTION
         </button>
     </div>
@@ -1207,7 +1349,7 @@
         document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
         document.getElementById(`slide-${slideNumber}`).classList.add('active');
 
-        // === ვიდეოს მუსიკის მართვა ===
+        // === ვიდეოს მუსიკის დინამიური მართვა ===
         const slide1Video = document.getElementById('slide-1-video');
         if (slide1Video) {
             if (slideNumber === 1) {
@@ -1218,6 +1360,7 @@
                 slide1Video.pause();       // დავაპაუზოთ ვიდეო რესურსების დასაზოგად
             }
         }
+        // =====================================
 
         // WebGL ნაწილაკების მდგომარეობის მორფინგი სლაიდების მიხედვით
         if (slideNumber === 0) {
@@ -1286,7 +1429,8 @@
 
     function toggleSelection(element, category) {
         element.classList.toggle('selected');
-        const item = element.innerText;
+        const titleEl = element.querySelector('h4');
+        const item = titleEl ? titleEl.innerText : element.innerText;
         const index = selections[category].indexOf(item);
         if (index > -1) {
             selections[category].splice(index, 1);
@@ -1298,7 +1442,8 @@
     function toggleSingleSelection(element, category) {
         element.parentNode.querySelectorAll('.select-card').forEach(c => c.classList.remove('selected'));
         element.classList.add('selected');
-        selections[category] = [element.innerText];
+        const titleEl = element.querySelector('h4');
+        selections[category] = [titleEl ? titleEl.innerText : element.innerText];
     }
 
     function validateHubState() {
@@ -1337,9 +1482,9 @@
 
     function buildSummaryReport() {
         document.getElementById('sum-datetime').innerText = `${selections.date} @ ${selections.time}`;
-        document.getElementById('sum-food').innerText = selections.food.length > 0 ? selections.food.map(f => f.split(' ')[1]).join(', ') : '--';
-        document.getElementById('sum-movie').innerText = selections.movies.length > 0 ? selections.movies[0].replace('🎬 ', '') : '--';
-        document.getElementById('sum-activities').innerText = selections.activities.length > 0 ? selections.activities.map(a => a.split(' ')[1]).join(', ') : '--';
+        document.getElementById('sum-food').innerText = selections.food.length > 0 ? selections.food.map(f => f.replace(/[^\w\s\u10D0-\u10FA]/g, '').trim()).join(', ') : '--';
+        document.getElementById('sum-movie').innerText = selections.movies.length > 0 ? selections.movies[0] : '--';
+        document.getElementById('sum-activities').innerText = selections.activities.length > 0 ? selections.activities.map(a => a.replace(/[^\w\s\u10D0-\u10FA]/g, '').trim()).join(', ') : '--';
     }
 
     spawnEmojisContinuous();
