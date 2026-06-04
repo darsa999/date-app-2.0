@@ -520,9 +520,8 @@
         <!-- === PREMIUM MOUNTED VIDEO CONTAINER (REPLACING EMOJI) === -->
         <div class="w-28 h-28 rounded-2xl overflow-hidden border border-rose-500/40 shadow-[0_0_25px_rgba(255,23,68,0.25)] relative my-2">
             <div class="absolute inset-0 bg-rose-500/10 pointer-events-none z-10"></div>
-            <video 
-              autoplay 
-              muted 
+            <video id="slide-1-video"
+              autoplay
               loop 
               playsinline
               class="w-full h-full object-cover">
@@ -1207,6 +1206,18 @@
     function nextSlide(slideNumber) {
         document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
         document.getElementById(`slide-${slideNumber}`).classList.add('active');
+
+        // === ვიდეოს მუსიკის მართვა ===
+        const slide1Video = document.getElementById('slide-1-video');
+        if (slide1Video) {
+            if (slideNumber === 1) {
+                slide1Video.muted = false; // ჩავრთოთ ხმა
+                slide1Video.play().catch(e => console.log("ავტომატური გაშვება შეიზღუდა: ", e));
+            } else {
+                slide1Video.muted = true;  // გავთიშოთ ხმა
+                slide1Video.pause();       // დავაპაუზოთ ვიდეო რესურსების დასაზოგად
+            }
+        }
 
         // WebGL ნაწილაკების მდგომარეობის მორფინგი სლაიდების მიხედვით
         if (slideNumber === 0) {
