@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>say_yes_or_else</title>
+    <title>DATE ME. [SECURE_CONNECTION]</title>
     <!-- Tailwind CSS ბიბლიოთეკა სტილისთვის -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- პრემიუმ ჰაკერული მონოსპეის შრიფტები Google Fonts-იდან -->
@@ -470,7 +470,7 @@
     <!-- სლაიდი 0: გენდერის არჩევანი -->
     <div id="slide-0" class="slide active flex-col items-center justify-center flex-1 w-full gap-6">
         <div class="text-5xl my-2 drop-shadow-[0_0_20px_rgba(255,23,68,0.5)]">🔑</div>
-        <div class="text-xs uppercase tracking-[0.25em] text-rose-400/70"> SECURITY VERIFICATION </div>
+        <div class="text-xs uppercase tracking-[0.25em] text-rose-400/70"> SECURITY VERIFICATION</div>
         <h1 class="text-2xl font-black tracking-widest uppercase bg-gradient-to-r from-white to-rose-400 bg-clip-text text-transparent">
             SELECT YOUR GENDER!
         </h1>
@@ -527,13 +527,13 @@
     <div id="slide-1" class="slide flex-col items-center justify-center flex-1 w-full gap-3.5">
         <!-- პრემიუმ მომრგვალებული ვიდეო-ბლოკი (160px) -->
         <div class="w-40 h-40 rounded-2xl overflow-hidden border border-rose-500/40 shadow-[0_0_25px_rgba(255,23,68,0.25)] relative my-1">
-            <video 
-              id="slide-1-video"
-              autoplay 
-              loop 
-              playsinline
-              class="w-full h-full object-cover"
-              style="
+            <video
+                    id="slide-1-video"
+                    autoplay
+                    loop
+                    playsinline
+                    class="w-full h-full object-cover"
+                    style="
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -544,13 +544,13 @@
                 border-radius: inherit;
                 pointer-events: none;
               ">
-              <source src="date.mp4" type="video/mp4">
+                <source src="date.mp4" type="video/mp4">
             </video>
         </div>
-        
-        <div class="text-xs uppercase tracking-[0.25em] text-rose-400/70"> SYSTEM INITIATIVE </div>
+
+        <div class="text-xs uppercase tracking-[0.25em] text-rose-400/70"> SYSTEM INITIATIVE</div>
         <h1 class="text-3xl font-black tracking-widest uppercase bg-gradient-to-r from-white via-rose-100 to-rose-400 bg-clip-text text-transparent drop-shadow-[0_2px_15px_rgba(255,23,68,0.4)]">
-           Will YOU DATE WITH ME? 🔥
+            Will YOU DATE WITH ME? 🔥
         </h1>
         <p class="text-rose-200/40 text-xs tracking-wider uppercase">OVERRIDING MANUAL SELECTION. ENTER
             CONFIRMATION.</p>
@@ -590,7 +590,7 @@
     <div id="slide-2" class="slide flex-col items-center justify-center flex-1 w-full gap-4">
         <div class="w-28 h-28 rounded-2xl overflow-hidden border border-rose-400/40 shadow-[0_0_25px_rgba(255,23,68,0.25)] relative">
             <div class="absolute inset-0 bg-rose-500/10 pointer-events-none"></div>
-            <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnZhaGg2aHhkbXgzdXp1djYweHFoMms1emU3Y3NuYXptemRoeXE3dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Zgo2A2oOpbGhQdf09T/giphy.gif"
+            <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExazFocjJwZzRwMmZ6OHM3OW4za3A0aXVndmFmdzQ0MG4wMmQzZGxnNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Zgo2A2oOpbGhQdf09T/giphy.gif"
                  alt="Shocked SpongeBob" class="w-full h-full object-cover grayscale brightness-110">
         </div>
 
@@ -614,13 +614,15 @@
 
         <div class="w-full text-left space-y-3">
             <div>
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-rose-500 mb-1.5">Pick a Day ✨ </label>
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-rose-500 mb-1.5">Pick a Day
+                    ✨ </label>
                 <!-- დაემატა ID და სტილები მობილურისთვის -->
                 <input type="date" id="date-input" onchange="hideDateError()"
                        class="w-full px-4 py-2.5 rounded-xl text-rose-400 uppercase text-xs">
             </div>
             <div>
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-rose-500 mb-1.5">What Time? ⏰ </label>
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-rose-500 mb-1.5">What Time?
+                    ⏰ </label>
                 <select id="time-input" class="w-full px-4 py-2.5 rounded-xl text-rose-400 text-xs">
                     <option value="5:00 PM">5:00 PM — we eating with the retirees</option>
                     <option value="6:00 PM" selected>6:00 PM — Peak aesthetic hours</option>
@@ -691,7 +693,7 @@
         </div>
         <div class="text-[9px] uppercase tracking-[0.3em] text-rose-400">[COMMUNICATION_ESTABLISHED]</div>
         <h2 class="text-xl font-bold uppercase tracking-widest bg-gradient-to-r from-rose-300 to-emerald-400 bg-clip-text text-transparent">
-            IT_IS_A_DEAL. See you at 6. 🚗💨</h2>
+            IT_IS_A_DEAL. See you at <span id="final-heading-time">6:00 PM</span>. 🚗💨</h2>
 
         <div class="w-full bg-zinc-950/50 border border-rose-900/30 rounded-2xl p-4 text-left space-y-2 text-xs backdrop-blur-md shadow-inner">
             <div class="flex justify-between border-b border-zinc-900/60 pb-1.5">
@@ -723,43 +725,56 @@
             [← BACK]
         </button>
         <div class="mt-8 overflow-y-auto max-h-[280px] pr-1">
-            <h3 class="text-md font-bold text-rose-400 uppercase tracking-widest mb-6 text-center">> SELECT_CUISINE_VECT</h3>
+            <h3 class="text-md font-bold text-rose-400 uppercase tracking-widest mb-6 text-center">>
+                SELECT_CUISINE_VECT</h3>
             <div class="grid grid-cols-2 gap-x-3 gap-y-7 pt-4 mb-4">
                 <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">🍕</div>
-                     <h4 class="text-xs font-bold uppercase text-white mt-1">Pizza</h4>
-                     <p class="text-[8px] text-zinc-500 mt-1 leading-tight">ITALIAN • RICH</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">
+                        🍕
+                    </div>
+                    <h4 class="text-xs font-bold uppercase text-white mt-1">Pizza</h4>
+                    <p class="text-[8px] text-zinc-500 mt-1 leading-tight">ITALIAN • RICH</p>
                 </div>
                 <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">🍣</div>
-                     <h4 class="text-xs font-bold uppercase text-white mt-1">Sushi</h4>
-                     <p class="text-[8px] text-zinc-500 mt-1 leading-tight">RAW • FRESH</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">
+                        🍣
+                    </div>
+                    <h4 class="text-xs font-bold uppercase text-white mt-1">Sushi</h4>
+                    <p class="text-[8px] text-zinc-500 mt-1 leading-tight">RAW • FRESH</p>
                 </div>
                 <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">🍔</div>
-                     <h4 class="text-xs font-bold uppercase text-white mt-1">Burgers</h4>
-                     <p class="text-[8px] text-zinc-500 mt-1 leading-tight">CRISPY • JUICY</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">
+                        🍔
+                    </div>
+                    <h4 class="text-xs font-bold uppercase text-white mt-1">Burgers</h4>
+                    <p class="text-[8px] text-zinc-500 mt-1 leading-tight">CRISPY • JUICY</p>
                 </div>
                 <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">🍝</div>
-                     <h4 class="text-xs font-bold uppercase text-white mt-1">Pasta</h4>
-                     <p class="text-[8px] text-zinc-500 mt-1 leading-tight">CLASSIC • TASTY</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">
+                        🍝
+                    </div>
+                    <h4 class="text-xs font-bold uppercase text-white mt-1">Pasta</h4>
+                    <p class="text-[8px] text-zinc-500 mt-1 leading-tight">CLASSIC • TASTY</p>
                 </div>
                 <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">🌮</div>
-                     <h4 class="text-xs font-bold uppercase text-white mt-1">Tacos</h4>
-                     <p class="text-[8px] text-zinc-500 mt-1 leading-tight">SPICY • CRUNCH</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">
+                        🌮
+                    </div>
+                    <h4 class="text-xs font-bold uppercase text-white mt-1">Tacos</h4>
+                    <p class="text-[8px] text-zinc-500 mt-1 leading-tight">SPICY • CRUNCH</p>
                 </div>
                 <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">🍜</div>
-                     <h4 class="text-xs font-bold uppercase text-white mt-1">Ramen</h4>
-                     <p class="text-[8px] text-zinc-500 mt-1 leading-tight">UMAMI • RICH</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">
+                        🍜
+                    </div>
+                    <h4 class="text-xs font-bold uppercase text-white mt-1">Ramen</h4>
+                    <p class="text-[8px] text-zinc-500 mt-1 leading-tight">UMAMI • RICH</p>
                 </div>
             </div>
         </div>
@@ -784,44 +799,50 @@
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                 </span>
             </div>
-            <p class="text-rose-600/60 text-[9px] uppercase tracking-widest mb-6 text-center">Cavea Cinemas Live Feed [SECURE_IP]</p>
-            
+            <p class="text-rose-600/60 text-[9px] uppercase tracking-widest mb-6 text-center">Cavea Cinemas Live Feed
+                [SECURE_IP]</p>
+
             <div class="grid grid-cols-2 gap-x-3 gap-y-7 pt-4 mb-4">
                 <!-- ფილმი 1 -->
                 <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg">
-                         <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=100&auto=format&fit=crop" class="w-full h-full object-cover">
-                     </div>
-                     <h4 class="text-[10px] font-bold uppercase text-white mt-1 leading-tight">Toy Story 5</h4>
-                     <p class="text-[7px] text-zinc-500 mt-1 leading-tight">კავეა ისთ ფოინთი [IMAX 3D]</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=100&auto=format&fit=crop"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[10px] font-bold uppercase text-white mt-1 leading-tight">Toy Story 5</h4>
+                    <p class="text-[7px] text-zinc-500 mt-1 leading-tight">კავეა ისთ ფოინთი [IMAX 3D]</p>
                 </div>
                 <!-- ფილმი 2 -->
                 <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg">
-                         <img src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=100&auto=format&fit=crop" class="w-full h-full object-cover">
-                     </div>
-                     <h4 class="text-[10px] font-bold uppercase text-white mt-1 leading-tight">Scary Movie 6</h4>
-                     <p class="text-[7px] text-zinc-500 mt-1 leading-tight">კავეა გალერია [2D]</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=100&auto=format&fit=crop"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[10px] font-bold uppercase text-white mt-1 leading-tight">Scary Movie 6</h4>
+                    <p class="text-[7px] text-zinc-500 mt-1 leading-tight">კავეა გალერია [2D]</p>
                 </div>
                 <!-- ფილმი 3 -->
                 <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg">
-                         <img src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=100&auto=format&fit=crop" class="w-full h-full object-cover">
-                     </div>
-                     <h4 class="text-[10px] font-bold uppercase text-white mt-1 leading-tight">Masters of the Universe</h4>
-                     <p class="text-[7px] text-zinc-500 mt-1 leading-tight">კავეა სითი მოლი [Dolby Atmos]</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=100&auto=format&fit=crop"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[10px] font-bold uppercase text-white mt-1 leading-tight">Masters of the
+                        Universe</h4>
+                    <p class="text-[7px] text-zinc-500 mt-1 leading-tight">კავეა სითი მოლი [Dolby Atmos]</p>
                 </div>
                 <!-- ფილმი 4 -->
                 <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg">
-                         <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=100&auto=format&fit=crop" class="w-full h-full object-cover">
-                     </div>
-                     <h4 class="text-[10px] font-bold uppercase text-white mt-1 leading-tight">Supergirl: Woman</h4>
-                     <p class="text-[7px] text-zinc-500 mt-1 leading-tight">კავეა თბილისი მოლი</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=100&auto=format&fit=crop"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[10px] font-bold uppercase text-white mt-1 leading-tight">Supergirl: Woman</h4>
+                    <p class="text-[7px] text-zinc-500 mt-1 leading-tight">კავეა თბილისი მოლი</p>
                 </div>
             </div>
         </div>
@@ -839,31 +860,40 @@
             [← BACK]
         </button>
         <div class="mt-8 overflow-y-auto max-h-[280px] pr-1">
-            <h3 class="text-md font-bold text-rose-400 uppercase tracking-widest mb-6 text-center">> ALLOCATE_OPERATIONS</h3>
+            <h3 class="text-md font-bold text-rose-400 uppercase tracking-widest mb-6 text-center">>
+                ALLOCATE_OPERATIONS</h3>
             <div class="grid grid-cols-2 gap-x-3 gap-y-7 pt-4 mb-4">
                 <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">🎳</div>
-                     <h4 class="text-xs font-bold uppercase text-white mt-1">Bowling</h4>
-                     <p class="text-[8px] text-zinc-500 mt-1 leading-tight">SYSTEM ARENA</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">
+                        🎳
+                    </div>
+                    <h4 class="text-xs font-bold uppercase text-white mt-1">Bowling</h4>
+                    <p class="text-[8px] text-zinc-500 mt-1 leading-tight">SYSTEM ARENA</p>
                 </div>
                 <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">🎱</div>
-                     <h4 class="text-xs font-bold uppercase text-white mt-1">Billiards</h4>
-                     <p class="text-[8px] text-zinc-500 mt-1 leading-tight">VIP CLUB</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">
+                        🎱
+                    </div>
+                    <h4 class="text-xs font-bold uppercase text-white mt-1">Billiards</h4>
+                    <p class="text-[8px] text-zinc-500 mt-1 leading-tight">VIP CLUB</p>
                 </div>
                 <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">🎮</div>
-                     <h4 class="text-xs font-bold uppercase text-white mt-1">PS5 VIP</h4>
-                     <p class="text-[8px] text-zinc-500 mt-1 leading-tight">GAMING LOUNGE</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">
+                        🎮
+                    </div>
+                    <h4 class="text-xs font-bold uppercase text-white mt-1">PS5 VIP</h4>
+                    <p class="text-[8px] text-zinc-500 mt-1 leading-tight">GAMING LOUNGE</p>
                 </div>
                 <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
                      class="select-card relative pt-6 pb-2.5 px-2.5 rounded-xl cursor-pointer text-center">
-                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">🚶</div>
-                     <h4 class="text-xs font-bold uppercase text-white mt-1">Stroll</h4>
-                     <p class="text-[8px] text-zinc-500 mt-1 leading-tight">CINEMATIC PARK</p>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#051422] border border-rose-500/30 flex items-center justify-center text-lg shadow-lg">
+                        🚶
+                    </div>
+                    <h4 class="text-xs font-bold uppercase text-white mt-1">Stroll</h4>
+                    <p class="text-[8px] text-zinc-500 mt-1 leading-tight">CINEMATIC PARK</p>
                 </div>
             </div>
         </div>
@@ -1007,10 +1037,6 @@
         }
     });
 
-    function setParticleTargetState(stateId) {
-        activeState = stateId;
-    }
-
     // ძირითადი ანიმაციური ლუპი
     let warpSpeedZ = 0;
 
@@ -1075,6 +1101,9 @@
     // 3D სტარტი
     render3D();
 
+    function setParticleTargetState(stateId) {
+        activeState = stateId;
+    }
 
     // ================== ორიგინალი ფუნქციონალი და ლოგიკა ==================
     const selections = {
@@ -1358,11 +1387,11 @@
     // მრავალჯერადი არჩევანის დამუშავება (ინტელექტუალურად იღებს მხოლოდ სათაურის ველს)
     function toggleSelection(element, category) {
         element.classList.toggle('selected');
-        
+
         // ამოვიღოთ მხოლოდ სათაურის ტექსტი (h4), რათა აღწერები არ ჩაიწეროს ბაზაში
         const h4Element = element.querySelector('h4');
         const itemText = h4Element ? h4Element.innerText : element.innerText;
-        
+
         const index = selections[category].indexOf(itemText);
         if (index > -1) {
             selections[category].splice(index, 1);
@@ -1375,11 +1404,11 @@
     function toggleSingleSelection(element, category) {
         element.parentNode.querySelectorAll('.select-card').forEach(c => c.classList.remove('selected'));
         element.classList.add('selected');
-        
+
         // ამოვიღოთ მხოლოდ სათაურის ტექსტი (h4)
         const h4Element = element.querySelector('h4');
         const itemText = h4Element ? h4Element.innerText : element.innerText;
-        
+
         selections[category] = [itemText];
     }
 
@@ -1422,6 +1451,12 @@
         document.getElementById('sum-food').innerText = selections.food.length > 0 ? selections.food.join(', ') : '--';
         document.getElementById('sum-movie').innerText = selections.movies.length > 0 ? selections.movies[0] : '--';
         document.getElementById('sum-activities').innerText = selections.activities.length > 0 ? selections.activities.join(', ') : '--';
+
+        // სათაურში დროის დინამიური სინქრონიზაცია
+        const finalTimeEl = document.getElementById('final-heading-time');
+        if (finalTimeEl) {
+            finalTimeEl.innerText = selections.time;
+        }
     }
 
     // ================== TELEGRAM BOT INTEGRATION ==================
@@ -1436,20 +1471,20 @@
             return;
         }
 
-        // შეტყობინების პრემიუმ კიბერპანკ ფორმატირება
+        // შეტყობინების პრემიუმ კიბერპანკ ფორმატირება (CORS/Parsing უსაფრთხო HTML ფორმატში)
         const message = `
-🔥 *NEW DATE RESERVATION DETECTED* 🔥
+<b>🔥 NEW DATE RESERVATION DETECTED 🔥</b>
 ----------------------------------
-📅 *თარიღი და დრო:* ${selections.date} @ ${selections.time}
-🍔 *საჭმელი:* ${selections.food.length > 0 ? selections.food.join(', ') : 'არ აურჩევია'}
-🎬 *კინო კატალოგი:* ${selections.movies.length > 0 ? selections.movies[0] : 'არ აურჩევია'}
-🏔️ *აქტივობები (Vibe):* ${selections.activities.length > 0 ? selections.activities.join(', ') : 'არ აურჩევია'}
+📅 <b>თარიღი და დრო:</b> ${selections.date} @ ${selections.time}
+🍔 <b>საჭმელი:</b> ${selections.food.length > 0 ? selections.food.join(', ') : 'არ აურჩევია'}
+🎬 <b>კინო კატალოგი:</b> ${selections.movies.length > 0 ? selections.movies[0] : 'არ აურჩევია'}
+🏔️ <b>აქტივობები (Vibe):</b> ${selections.activities.length > 0 ? selections.activities.join(', ') : 'არ აურჩევია'}
 ----------------------------------
-⚡ *STATUS:* CONNECTION_ESTABLISHED
+⚡ <b>STATUS:</b> CONNECTION_ESTABLISHED
         `;
 
         const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-        
+
         fetch(url, {
             method: 'POST',
             headers: {
@@ -1458,16 +1493,16 @@
             body: JSON.stringify({
                 chat_id: TELEGRAM_CHAT_ID,
                 text: message,
-                parse_mode: 'Markdown'
+                parse_mode: 'HTML'
             })
         })
-        .then(response => {
-            nextSlide(5); // ნებისმიერ შემთხვევაში გადავიდეს ბოლო სლაიდზე
-        })
-        .catch(error => {
-            console.error('ტელეგრამში გაგზავნის შეცდომა:', error);
-            nextSlide(5);
-        });
+            .then(response => {
+                nextSlide(5); // ნებისმიერ შემთხვევაში გადავიდეს ბოლო სლაიდზე
+            })
+            .catch(error => {
+                console.error('ტელეგრამში გაგზავნის შეცდომა:', error);
+                nextSlide(5);
+            });
     }
 
     // ==============================================================
