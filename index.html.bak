@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DATE ME. [SECURE_CONNECTION]</title>
+    <!-- Tailwind CSS ბიბლიოთეკა სტილისთვის -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- პრემიუმ ჰაკერული მონოსპეის შრიფტები Google Fonts-იდან -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Space+Grotesk:wght=500;700&family=Plus+Jakarta+Sans:wght=600;800&display=swap"
+          rel="stylesheet">
+    <!-- WebGL ძრავის ბიბლიოთეკები -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: #050002;
+            overflow-x: hidden;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 3D WebGL ტილო */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ნაზი მატრიცული სკანირების ხაზები */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%),
+            linear-gradient(90deg, rgba(255, 0, 100, 0.02), rgba(255, 23, 68, 0.01), rgba(255, 64, 129, 0.02));
+            z-index: 2;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        h1, h2, .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* ულტრა-გამჭვირვალე ჰაკერული შუშის ეფექტი (Hacker Cyber-Glass) */
+        .premium-glass {
+            background: rgba(15, 2, 5, 0.35); /* მაქსიმალურად გამჭვირვალე ნაზი ვარდისფერი ტონით */
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border: 1px solid rgba(255, 23, 68, 0.3); /* ნეონური ალისფერი ჩარჩო */
+            box-shadow: inset 0 1px 3px rgba(255, 64, 129, 0.2),
+            0 25px 60px rgba(0, 0, 0, 0.9),
+            0 0 50px rgba(255, 23, 68, 0.15);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+            position: relative;
+        }
+
+        /* წითელი ნეონის შუშა Lockout-ისთვის */
+        .premium-glass-lockout {
+            background: rgba(35, 2, 5, 0.4);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            box-shadow: inset 0 1px 3px rgba(239, 68, 68, 0.3),
+            0 25px 60px rgba(0, 0, 0, 0.95),
+            0 0 60px rgba(239, 68, 68, 0.25);
+        }
+
+        /* ტექნოლოგიური კუთხეები (Cyber Brackets) */
+        .premium-glass::before, .premium-glass::after,
+        .glass-corners::before, .glass-corners::after {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-color: #ff1744;
+            border-style: solid;
+            pointer-events: none;
+            filter: drop-shadow(0 0 4px #ff1744);
+        }
+
+        /* Lockout-ის შემთხვევაში კუთხეები წითლდება */
+        .lockout-theme::before, .lockout-theme::after,
+        .lockout-corners::before, .lockout-corners::after {
+            border-color: #ef4444 !important;
+            filter: drop-shadow(0 0 4px #ef4444) !important;
+        }
+
+        /* Top Left */
+        .premium-glass::before {
+            top: -2px;
+            left: -2px;
+            border-width: 2.5px 0 0 2.5px;
+            border-radius: 4px 0 0 0;
+        }
+
+        /* Top Right */
+        .premium-glass::after {
+            top: -2px;
+            right: -2px;
+            border-width: 2.5px 2.5px 0 0;
+            border-radius: 0 4px 0 0;
+        }
+
+        /* Bottom Left */
+        .glass-corners::before {
+            bottom: -2px;
+            left: -2px;
+            border-width: 0 0 2.5px 2.5px;
+            border-radius: 0 0 0 4px;
+        }
+
+        /* Bottom Right */
+        .glass-corners::after {
+            bottom: -2px;
+            right: -2px;
+            border-width: 0 2.5px 2.5px 0;
+            border-radius: 0 0 4px 0;
+        }
+
+        /* მუდმივი ჰოლოგაფიული კრისტალების წვიმა */
+        #emoji-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .falling-emoji {
+            position: absolute;
+            top: -60px;
+            will-change: transform;
+            animation: continuousFall linear infinite;
+            filter: drop-shadow(0 0 15px rgba(255, 23, 68, 0.9));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes continuousFall {
+            0% {
+                transform: translateY(0) rotate(0deg) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.95;
+            }
+            90% {
+                opacity: 0.95;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg) translateX(70px);
+                opacity: 0;
+            }
+        }
+
+        /* კიბერ ციფრული ნაწილაკების აფეთქება */
+        #fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        .particle {
+            position: absolute;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            will-change: transform, opacity;
+            animation: explode 1.3s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+            text-shadow: 0 0 8px currentColor;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--mx), var(--my)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* ინპუტების სარკისებრი დიზაინი */
+        select, input[type="date"] {
+            background: rgba(255, 23, 68, 0.05);
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            color: #ff4081;
+            font-family: 'Share Tech Mono', monospace;
+            color-scheme: dark;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        select:focus, input[type="date"]:focus {
+            border-color: #ff1744;
+            outline: none;
+            box-shadow: 0 0 25px rgba(255, 23, 68, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        }
+
+        /* სლაიდების მართვა და უნიკალური ანიმაციები */
+        .slide {
+            display: none;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        /* Slide 0: დეკრიპტაციისა და ფოკუსის ეფექტი */
+        #slide-0.active {
+            animation: slide0Reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slide0Reveal {
+            0% {
+                transform: scale(0.92);
+                opacity: 0;
+                filter: blur(10px);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        /* Slide Lockout: წითელი ტექტონიკური ბიძგების და განგაშის ეფექტი */
+        #slide-lockout.active {
+            animation: lockoutReveal 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
+        }
+
+        @keyframes lockoutReveal {
+            0% {
+                transform: scale(0.9) translateY(-20px);
+                opacity: 0;
+                filter: brightness(1.8);
+            }
+            15%, 45%, 75% {
+                transform: scale(1.02) translateX(-6px);
+            }
+            30%, 60%, 90% {
+                transform: scale(0.98) translateX(6px);
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+                filter: brightness(1);
+            }
+        }
+
+        /* Slide 1: 3D გვერდის გადაშლის/ტრიალის ეფექტი */
+        #slide-1.active {
+            animation: slide1Reveal 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transform-origin: center left;
+        }
+
+        @keyframes slide1Reveal {
+            0% {
+                transform: rotateY(-90deg) scale(0.85);
+                opacity: 0;
+                filter: brightness(0.4);
+            }
+            100% {
+                transform: rotateY(0deg) scale(1);
+                opacity: 1;
+                filter: brightness(1);
+            }
+        }
+
+        /* Slide 2: ეპიკური ამოხტომის და რბილი როტაციის ანიმაცია */
+        #slide-2.active {
+            animation: slide2Reveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes slide2Reveal {
+            0% {
+                transform: scale(0.4) rotate(15deg);
+                opacity: 0;
+                filter: blur(5px);
+            }
+            70% {
+                transform: scale(1.08) rotate(-4deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        /* Slide 3: კიბერნეტიკული სრიალი მარჯვნიდან */
+        #slide-3.active {
+            animation: slide3Reveal 0.75s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+        }
+
+        @keyframes slide3Reveal {
+            0% {
+                transform: translateX(80px) skewX(-8deg);
+                opacity: 0;
+                filter: blur(4px);
+            }
+            100% {
+                transform: translateX(0) skewX(0deg);
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        /* Slide 4: ჰოლოგრაფიული X-ღერძის 3D ჩამოშლა ზემოდან */
+        #slide-4.active {
+            animation: slide4Reveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transform-origin: top center;
+        }
+
+        @keyframes slide4Reveal {
+            0% {
+                transform: rotateX(-95deg);
+                opacity: 0;
+                filter: brightness(0.3);
+            }
+            100% {
+                transform: rotateX(0deg);
+                opacity: 1;
+                filter: brightness(1);
+            }
+        }
+
+        /* Slide 5: დიაგონალური ამოტივტივება ქვემოდან */
+        #slide-5.active {
+            animation: slide5Reveal 0.9s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes slide5Reveal {
+            0% {
+                transform: translate(-40px, 40px) scale(0.9) rotate(-3deg);
+                opacity: 0;
+                filter: blur(8px);
+            }
+            100% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        /* ქვემენიუების დახვეწილი გახსნის ანიმაცია */
+        #sub-food:not(.hidden), #sub-movies:not(.hidden), #sub-activities:not(.hidden) {
+            animation: subMenuReveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes subMenuReveal {
+            0% {
+                transform: scale(1.06) translateY(12px);
+                opacity: 0;
+                filter: blur(6px);
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        /* ჰაკერული სელექთ ბარათები */
+        .select-card {
+            background: rgba(255, 23, 68, 0.02);
+            border: 1px solid rgba(255, 23, 68, 0.1);
+            transition: all 0.25s ease;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .select-card:hover {
+            border-color: rgba(255, 64, 129, 0.4);
+            background: rgba(255, 64, 129, 0.04);
+            box-shadow: 0 0 15px rgba(255, 64, 129, 0.15);
+        }
+
+        .select-card.selected {
+            background: rgba(255, 23, 68, 0.15);
+            border-color: #ff1744;
+            box-shadow: 0 0 30px rgba(255, 23, 68, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+            color: #ff1744;
+            text-shadow: 0 0 8px rgba(255, 23, 68, 0.5);
+        }
+
+        /* "No" ღილაკის მყისიერი ფეიდ-აუტის სტილი */
+        #no-btn {
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white flex items-center justify-center p-4">
+
+<!-- 3D WebGL ტილო -->
+<canvas id="webgl-canvas"></canvas>
+
+<svg style="display: none;">
+    <defs>
+        <linearGradient id="crystal-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="rgba(255, 23, 68, 0.9)"/>
+            <stop offset="50%" stop-color="rgba(255, 64, 129, 0.45)"/>
+            <stop offset="100%" stop-color="rgba(80, 2, 10, 0.8)"/>
+        </linearGradient>
+        <linearGradient id="crystal-grad-red" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="rgba(239, 68, 68, 1)"/>
+            <stop offset="50%" stop-color="rgba(244, 63, 94, 0.8)"/>
+            <stop offset="100%" stop-color="rgba(150, 10, 10, 1)"/>
+        </linearGradient>
+        <linearGradient id="crystal-grad-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="rgba(16, 185, 129, 0.95)"/>
+            <stop offset="50%" stop-color="rgba(52, 211, 153, 0.5)"/>
+            <stop offset="100%" stop-color="rgba(6, 78, 59, 0.85)"/>
+        </linearGradient>
+    </defs>
+</svg>
+
+<!-- ფონის ეფექტების კონტეინერები -->
+<div id="emoji-rain"></div>
+<div id="fireworks"></div>
+
+<!-- მთავარი ჰაკერული ინტერფეისის ბლოკი -->
+<div id="main-card"
+     class="premium-glass w-full max-w-lg rounded-3xl p-6 overflow-hidden flex flex-col items-center text-center z-10 min-h-[420px] justify-between">
+
+    <!-- კუთხის ფრჩხილები -->
+    <div id="card-corners" class="glass-corners"></div>
+
+    <!-- პროგრესის წერტილები -->
+    <div id="progress-container" class="flex space-x-3 mb-4 justify-center relative z-10 hidden">
+        <div class="dot w-2 h-2 rounded-full bg-rose-500 opacity-100 transition-all duration-300 shadow-[0_0_10px_#ff1744]"></div>
+        <div class="dot w-2 h-2 rounded-full bg-white opacity-20 transition-all duration-300"></div>
+        <div class="dot w-2 h-2 rounded-full bg-white opacity-20 transition-all duration-300"></div>
+        <div class="dot w-2 h-2 rounded-full bg-white opacity-20 transition-all duration-300"></div>
+        <div class="dot w-2 h-2 rounded-full bg-white opacity-20 transition-all duration-300"></div>
+    </div>
+
+    <!-- სლაიდი 0: გენდერის არჩევანი -->
+    <div id="slide-0" class="slide active flex-col items-center justify-center flex-1 w-full gap-6">
+        <div class="text-5xl my-2 drop-shadow-[0_0_20px_rgba(255,23,68,0.5)]">🔑</div>
+        <div class="text-xs uppercase tracking-[0.25em] text-rose-400/70"> SECURITY VERIFICATION </div>
+        <h1 class="text-2xl font-black tracking-widest uppercase bg-gradient-to-r from-white to-rose-400 bg-clip-text text-transparent">
+            SELECT YOUR GENDER!
+        </h1>
+        <p class="text-rose-200/40 text-xs tracking-wider uppercase">IDENTITY CONFIRMATION IS REQUIRED FOR ENTRY.</p>
+
+        <div class="flex flex-row gap-6 w-full mt-10 pt-4 justify-center">
+            <!-- ქალის ქარდი -->
+            <div onclick="handleGenderSelect('female')"
+                 class="gender-card relative flex flex-col items-center justify-center w-[42%] p-5 rounded-2xl bg-zinc-950/40 border border-zinc-800/80 cursor-pointer transition-all duration-300 hover:border-emerald-500/80 hover:shadow-[0_0_25px_rgba(16,185,129,0.35)] group">
+                <div class="absolute -top-7 w-14 h-14 rounded-full bg-[#051422] border border-rose-400/30 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:border-emerald-500 group-hover:shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C11.5 5 9.5 7 7 7C4.5 7 3 5 3 4C3 3 4.5 2 7 2C9.5 2 11.5 2 12 2ZM12 22C12.5 19 14.5 17 17 17C19.5 17 21 19 21 20C21 21 19.5 22 17 22C14.5 22 12.5 22 12 22ZM2 12C5 11.5 7 9.5 7 7C7 4.5 5 3 4 3C3 3 2 4.5 2 7C2 9.5 2 11.5 2 12ZM22 12C19 12.5 17 14.5 17 17C17 19.5 19 21 20 21C21 21 22 19.5 22 17C22 14.5 22 11.5 22 12Z"
+                              fill="url(#crystal-grad-emerald)" stroke="#10b981" stroke-width="1.5"
+                              stroke-linejoin="round"/>
+                        <circle cx="12" cy="12" r="3" fill="url(#crystal-grad-emerald)" stroke="#10b981"
+                                stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <span class="text-xs uppercase tracking-widest text-rose-400 mt-4 font-bold transition-all duration-300 group-hover:text-emerald-400">Female</span>
+            </div>
+
+            <!-- კაცის ქარდი -->
+            <div onclick="handleGenderSelect('male')"
+                 class="gender-card relative flex flex-col items-center justify-center w-[42%] p-5 rounded-2xl bg-zinc-950/40 border border-zinc-800/80 cursor-pointer transition-all duration-300 hover:border-red-500/80 hover:shadow-[0_0_25px_rgba(239,68,68,0.35)] group">
+                <div class="absolute -top-7 w-14 h-14 rounded-full bg-[#051422] border border-red-500/30 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:border-red-500 group-hover:shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="12,2 22,8 22,18 12,24 2,18 2,8" fill="url(#crystal-grad-red)" stroke="#ef4444"
+                                 stroke-width="1.5"/>
+                        <path d="M12 2v22M2 8h20M2 18h20" stroke="rgba(255, 255, 255, 0.15)" stroke-width="0.8"/>
+                    </svg>
+                </div>
+                <span class="text-xs uppercase tracking-widest text-red-400 mt-4 font-bold transition-all duration-300 group-hover:text-red-500">Male</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- სლაიდი LOCKOUT: ბიჭების Lockout გვერდი -->
+    <div id="slide-lockout" class="slide flex-col items-center justify-center flex-1 w-full gap-4">
+        <div class="text-5xl my-2 drop-shadow-[0_0_20px_rgba(239,68,68,0.7)]">🚨</div>
+        <div class="text-xs uppercase tracking-[0.25em] text-red-500">[ACCESS_DENIED_OPERATOR]</div>
+        <h1 class="text-xl font-black tracking-widest uppercase text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+            ITS NOT FOR YOU BRO!
+        </h1>
+        <p class="text-red-400/40 text-xs tracking-wider uppercase">SYSTEM EXCLUSION APPLIED. CONNECTION
+            INVALIDATED.</p>
+
+        <button onclick="terminateApplication()"
+                class="w-full mt-4 py-3 bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 font-bold rounded-xl tracking-widest text-xs uppercase cursor-pointer text-white border border-red-500/40 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+            SORRY
+        </button>
+    </div>
+
+    <!-- სლაიდი 1: შემოთავაზება (დაპატარავდა gap-3.5-მდე, რათა დავიცვათ ბარათის ზომა) -->
+    <div id="slide-1" class="slide flex-col items-center justify-center flex-1 w-full gap-3.5">
+        <!-- პრემიუმ მომრგვალებული ვიდეო-ბლოკი - გაიზარდა w-40 h-40 (160px) ზომამდე -->
+        <div class="w-40 h-40 rounded-2xl overflow-hidden border border-rose-500/40 shadow-[0_0_25px_rgba(255,23,68,0.25)] relative my-1">
+            <video 
+              id="slide-1-video"
+              autoplay 
+              loop 
+              playsinline
+              class="w-full h-full object-cover"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                z-index: 0;
+                border-radius: inherit;
+                pointer-events: none;
+              ">
+              <source src="date.mp4" type="video/mp4">
+            </video>
+        </div>
+        
+        <div class="text-xs uppercase tracking-[0.25em] text-rose-400/70"> SYSTEM INITIATIVE </div>
+        <h1 class="text-3xl font-black tracking-widest uppercase bg-gradient-to-r from-white via-rose-100 to-rose-400 bg-clip-text text-transparent drop-shadow-[0_2px_15px_rgba(255,23,68,0.4)]">
+           Will YOU DATE WITH ME? 🔥
+        </h1>
+        <p class="text-rose-200/40 text-xs tracking-wider uppercase">OVERRIDING MANUAL SELECTION. ENTER
+            CONFIRMATION.</p>
+
+        <div id="btn-container" class="relative w-full min-h-[100px] flex flex-row gap-6 justify-center mt-6 pt-2">
+            <!-- YES ქარდი -->
+            <div id="yes-btn"
+                 class="relative flex flex-col items-center justify-center w-[42%] py-2.5 px-5 rounded-2xl bg-zinc-950/40 border border-zinc-800/80 cursor-pointer transition-all duration-300 hover:border-emerald-500/80 hover:shadow-[0_0_25px_rgba(16,185,129,0.35)] group z-10">
+                <div class="absolute -top-7 w-14 h-14 rounded-full bg-[#051422] border border-rose-400/30 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:border-emerald-500 group-hover:shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                              fill="url(#crystal-grad-emerald)" stroke="#10b981" stroke-width="1.5"/>
+                        <path d="M8 12L11 15L16 9" stroke="#fff" stroke-width="2.5" stroke-linecap="round"
+                              stroke-linejoin="round" filter="drop-shadow(0 0 3px #10b981)"/>
+                    </svg>
+                </div>
+                <span class="text-xs uppercase tracking-widest text-rose-400 mt-4 font-bold transition-all duration-300 group-hover:text-emerald-400">YESSS 💖</span>
+            </div>
+
+            <!-- NO ქარდი -->
+            <div id="no-btn"
+                 class="relative flex flex-col items-center justify-center w-[42%] py-2.5 px-5 rounded-2xl bg-zinc-950/40 border border-zinc-800/80 cursor-pointer transition-all duration-300 hover:border-red-500/80 hover:shadow-[0_0_25px_rgba(239,68,68,0.35)] group z-10">
+                <div class="absolute -top-7 w-14 h-14 rounded-full bg-[#051422] border border-red-500/30 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:border-red-500 group-hover:shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                              fill="url(#crystal-grad-red)" stroke="#ef4444" stroke-width="1.5"/>
+                        <path d="M8 8L16 16M16 8L8 16" stroke="#fff" stroke-width="2.5" stroke-linecap="round"
+                              stroke-linejoin="round" filter="drop-shadow(0 0 3px #ef4444)"/>
+                    </svg>
+                </div>
+                <span class="text-xs uppercase tracking-widest text-red-400 mt-4 font-bold transition-all duration-300 group-hover:text-red-500">no 💀</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- სლაიდი 2: სპანჯბობის რეაქცია -->
+    <div id="slide-2" class="slide flex-col items-center justify-center flex-1 w-full gap-4">
+        <div class="w-28 h-28 rounded-2xl overflow-hidden border border-rose-400/40 shadow-[0_0_25px_rgba(255,23,68,0.25)] relative">
+            <div class="absolute inset-0 bg-rose-500/10 pointer-events-none"></div>
+            <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXIzZ2V4Zmo4ZGVma293ZnVoMThlM3czeThnczBzZmd4d2xhOTQxciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BRSZTf7QA4W7SngoS9/giphy.gif"
+                 alt="Shocked SpongeBob" class="w-full h-full object-cover grayscale brightness-110">
+        </div>
+
+        <h2 class="text-xl font-bold uppercase tracking-wider text-rose-300">I KNEW YOU'D SAY YES. 🤩 </h2>
+        <p class="text-zinc-400 max-w-sm text-xs leading-relaxed">Honestly, I was completely prepared for a glitch in
+            the matrix. Let's lock down the schedule parameters.</p>
+        <button onclick="playClickBeep(); nextSlide(3);"
+                class="mt-2 px-6 py-2 bg-zinc-950/60 hover:bg-zinc-900/80 border border-rose-500/30 rounded-xl font-bold text-xs tracking-widest uppercase transition-all shadow-md backdrop-blur-md text-rose-400">
+            Okay okay ➡️
+        </button>
+    </div>
+
+    <!-- სლაიდი 3: თარიღის და დროის არჩევა -->
+    <div id="slide-3" class="slide flex-col items-center justify-center flex-1 w-full gap-4">
+        <h2 class="text-xl font-bold uppercase tracking-wider text-rose-300 mb-1">So... When are you free? 📅</h2>
+
+        <!-- კიბერნეტიკული შეცდომის შეტყობინების ბლოკი -->
+        <div id="date-error" class="hidden text-xs text-red-500 font-bold uppercase tracking-widest animate-pulse my-1">
+            ERROR: SELECT VALID DATE
+        </div>
+
+        <div class="w-full text-left space-y-3">
+            <div>
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-rose-500 mb-1.5">Pick a Day ✨ </label>
+                <input type="date" id="date-input" onchange="hideDateError()"
+                       class="w-full px-4 py-2.5 rounded-xl text-rose-400 uppercase text-xs">
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-rose-500 mb-1.5">What Time? ⏰ </label>
+                <select id="time-input" class="w-full px-4 py-2.5 rounded-xl text-rose-400 text-xs">
+                    <option value="5:00 PM">5:00 PM — we eating with the retirees</option>
+                    <option value="6:00 PM" selected>6:00 PM — Peak aesthetic hours</option>
+                    <option value="7:00 PM">7:00 PM — You're making me hungry already</option>
+                    <option value="8:00 PM">8:00 PM — Elite tier timing</option>
+                </select>
+            </div>
+        </div>
+
+        <button onclick="playClickBeep(); saveDateTime();"
+                class="w-full mt-4 px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-600 font-bold rounded-xl uppercase tracking-widest text-xs transition-all shadow-lg shadow-rose-500/20 border border-rose-400/20">
+            Set the date! 🤍
+        </button>
+    </div>
+
+    <!-- სლაიდი 4: კატეგორიების არჩევა -->
+    <div id="slide-4" class="slide flex-col items-center justify-center flex-1 w-full gap-3">
+        <h2 class="text-xl font-bold uppercase tracking-wider text-rose-300">CONFIGURE_PREFERENCES. 🎯</h2>
+        <p class="text-[9px] text-rose-400/60 uppercase tracking-widest mb-4">MULTIPLE CONFIGURATIONS PERMITTED</p>
+
+        <div class="grid grid-cols-3 gap-3.5 w-full mt-8 pt-4 mb-4">
+            <!-- საჭმელი -->
+            <div onclick="playClickBeep(); openSubMenu('food');" id="hub-food"
+                 class="relative flex flex-col items-center justify-center p-4 rounded-2xl bg-zinc-950/40 border border-zinc-800/80 cursor-pointer transition-all duration-300 hover:border-rose-400/80 hover:shadow-[0_0_20px_rgba(255,23,68,0.2)] group">
+                <div class="absolute -top-6 w-12 h-12 rounded-full bg-[#051422] border border-rose-400/30 flex items-center justify-center text-xl shadow-lg transition-all duration-300 group-hover:border-rose-400 group-hover:shadow-[0_0_15px_rgba(255,23,68,0.4)]">
+                    🍔
+                </div>
+                <span class="text-[10px] uppercase tracking-wider text-rose-400 mt-4 font-bold transition-all duration-300 group-hover:text-rose-300">Food</span>
+                <span id="status-food"
+                      class="text-[8px] text-zinc-500 mt-1 truncate max-w-full text-center">Pending</span>
+            </div>
+
+            <!-- კინო -->
+            <div onclick="playClickBeep(); openSubMenu('movies');" id="hub-movies"
+                 class="relative flex flex-col items-center justify-center p-4 rounded-2xl bg-zinc-950/40 border border-zinc-800/80 cursor-pointer transition-all duration-300 hover:border-rose-400/80 hover:shadow-[0_0_20px_rgba(255,23,68,0.2)] group">
+                <div class="absolute -top-6 w-12 h-12 rounded-full bg-[#051422] border border-rose-400/30 flex items-center justify-center text-xl shadow-lg transition-all duration-300 group-hover:border-rose-400 group-hover:shadow-[0_0_15px_rgba(255,23,68,0.4)]">
+                    🎬
+                </div>
+                <span class="text-[10px] uppercase tracking-wider text-rose-400 mt-4 font-bold transition-all duration-300 group-hover:text-rose-300">Cinema</span>
+                <span id="status-movies"
+                      class="text-[8px] text-zinc-500 mt-1 truncate max-w-full text-center">Pending</span>
+            </div>
+
+            <!-- აქტივობები -->
+            <div onclick="playClickBeep(); openSubMenu('activities');" id="hub-activities"
+                 class="relative flex flex-col items-center justify-center p-4 rounded-2xl bg-zinc-950/40 border border-zinc-800/80 cursor-pointer transition-all duration-300 hover:border-rose-400/80 hover:shadow-[0_0_20px_rgba(255,23,68,0.2)] group">
+                <div class="absolute -top-6 w-12 h-12 rounded-full bg-[#051422] border border-rose-400/30 flex items-center justify-center text-xl shadow-lg transition-all duration-300 group-hover:border-rose-400 group-hover:shadow-[0_0_15px_rgba(255,23,68,0.4)]">
+                    🏔️
+                </div>
+                <span class="text-[10px] uppercase tracking-wider text-rose-400 mt-4 font-bold transition-all duration-300 group-hover:text-rose-300">Vibe</span>
+                <span id="status-activities" class="text-[8px] text-zinc-500 mt-1 truncate max-w-full text-center">Pending</span>
+            </div>
+        </div>
+
+        <button id="final-hub-next" disabled onclick="playClickBeep(); nextSlide(5);"
+                class="w-full mt-2 py-3 bg-zinc-950/40 text-zinc-600 font-bold rounded-xl uppercase tracking-widest text-xs transition-all cursor-not-allowed border border-zinc-900">
+            COMPILE_DATABASE ⚡
+        </button>
+    </div>
+
+    <!-- სლაიდი 5: საბოლოო ანგარიში -->
+    <div id="slide-5" class="slide flex-col items-center justify-center flex-1 w-full gap-4">
+        <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-rose-400 shadow-[0_0_15px_rgba(255,23,68,0.4)] relative">
+            <div class="absolute inset-0 bg-rose-500/10 pointer-events-none"></div>
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbms4Z3g0M3ZyeW9xM2pxYmY4ZXNwaGpxZnNxanp6Z3Z0ZHh4dTJyayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/TIGPnhTUw61N04X9OH/giphy.gif"
+                 alt="Shrek Deal" class="w-full h-full object-cover grayscale brightness-110">
+        </div>
+        <div class="text-[9px] uppercase tracking-[0.3em] text-rose-400">[COMMUNICATION_ESTABLISHED]</div>
+        <h2 class="text-xl font-bold uppercase tracking-widest bg-gradient-to-r from-rose-300 to-emerald-400 bg-clip-text text-transparent">
+            IT_IS_A_DEAL. See you at 6. 🚗💨</h2>
+
+        <div class="w-full bg-zinc-950/50 border border-rose-900/30 rounded-2xl p-4 text-left space-y-2 text-xs backdrop-blur-md shadow-inner">
+            <div class="flex justify-between border-b border-zinc-900/60 pb-1.5">
+                <span class="text-rose-500/60 uppercase tracking-widest font-semibold text-[10px]">SCHEDULE_DATE_TIME</span>
+                <span id="sum-datetime" class="font-bold text-rose-300 text-[10px]">--</span>
+            </div>
+            <div class="flex justify-between border-b border-zinc-900/60 pb-1.5">
+                <span class="text-rose-500/60 uppercase tracking-widest font-semibold text-[10px]">CUISINE_PARAMETERS</span>
+                <span id="sum-food" class="font-bold text-white text-[10px]">--</span>
+            </div>
+            <div class="flex justify-between border-b border-zinc-900/60 pb-1.5">
+                <span class="text-rose-500/60 uppercase tracking-widest font-semibold text-[10px]">CINEMA_CATALOG</span>
+                <span id="sum-movie" class="font-bold text-white text-[10px]">--</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-rose-500/60 uppercase tracking-widest font-semibold text-[10px]">MISSION_OPERATIONS</span>
+                <span id="sum-activities" class="font-bold text-white text-[10px]">--</span>
+            </div>
+        </div>
+        <p class="text-[9px] text-rose-500/50 mt-1 italic">PS: DATA PACKETS SENT SECURELY. MISSION COMPLETED.</p>
+    </div>
+
+    <!-- ================= ქვემენიუების მოდალური ფანჯრები ================= -->
+    <!-- საჭმლის მენიუ -->
+    <div id="sub-food"
+         class="hidden absolute inset-0 bg-[#120005]/95 p-6 flex-col justify-between z-20 rounded-3xl border border-rose-500/30 shadow-2xl backdrop-blur-2xl">
+        <button onclick="playClickBeep(); closeSubMenu('food');"
+                class="absolute top-4 left-4 text-rose-400 hover:text-rose-200 text-xs tracking-wider flex items-center gap-1 font-mono cursor-pointer">
+            [← BACK]
+        </button>
+        <div class="mt-8 flex-1 flex flex-col overflow-hidden">
+            <h3 class="text-lg font-bold text-rose-400 uppercase tracking-widest mb-1">> SELECT_CUISINE_VECT</h3>
+            <p class="text-rose-600/60 text-[10px] uppercase tracking-widest mb-4">Allocate Caloric Parameters</p>
+            
+            <div class="grid grid-cols-2 gap-x-3.5 gap-y-7 overflow-y-auto pr-1 max-h-[250px] pt-6 pb-2">
+                <!-- Pizza -->
+                <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🍕
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Pizza</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">იტალიური კლასიკა, მდნარი ყველითა და სოუსით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">CHEESY • HOT</span>
+                </div>
+
+                <!-- Sushi -->
+                <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🍣
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Sushi</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">უგემრიელესი როლები, ახალი ფუტურისტული არომატით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">RAW • FRESH</span>
+                </div>
+
+                <!-- Burgers -->
+                <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🍔
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Burgers</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ორმაგი კოტლეტი, მდნარი ჩედარი და საიდუმლო სოუსი.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">JUICY • ELITE</span>
+                </div>
+
+                <!-- Pasta -->
+                <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🍝
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Pasta</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ნაზი კარბონარა, დამზადებული ნამდვილი სიყვარულით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">CLASSIC • WARM</span>
+                </div>
+
+                <!-- Tacos -->
+                <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🌮
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Tacos</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ხრაშუნა ტაკოები ცხარე, საინტერესო შიგთავსით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">SPICY • MEXICAN</span>
+                </div>
+
+                <!-- Ramen -->
+                <div onclick="playSelectBeep(); toggleSelection(this, 'food');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🍜
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Ramen</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">მდიდარი არომატული ბულიონი ნუდლსითა და კვერცხით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">UMAMI • RICH</span>
+                </div>
+            </div>
+        </div>
+        <button onclick="playClickBeep(); closeSubMenu('food');"
+                class="w-full py-3 bg-gradient-to-r from-rose-600 to-pink-600 rounded-xl font-bold uppercase tracking-widest text-xs shadow-md mt-4 flex-shrink-0">
+            COMMIT_SELECTION
+        </button>
+    </div>
+
+    <!-- ფილმების მენიუ (რეალური კავეას რეპერტუარი) -->
+    <div id="sub-movies"
+         class="hidden absolute inset-0 bg-[#120005]/95 p-6 flex-col justify-between z-20 rounded-3xl border border-rose-500/30 shadow-2xl backdrop-blur-2xl">
+        <button onclick="playClickBeep(); closeSubMenu('movies');"
+                class="absolute top-4 left-4 text-rose-400 hover:text-rose-200 text-xs tracking-wider flex items-center gap-1 font-mono cursor-pointer">
+            [← BACK]
+        </button>
+        <div class="mt-8 flex-1 flex flex-col overflow-hidden">
+            <div class="flex items-center gap-2 mb-1 flex-shrink-0">
+                <h3 class="text-lg font-bold text-rose-400 uppercase tracking-widest">> RUNNING_CINEMA_CATALOG</h3>
+                <!-- მბჟუტავი წითელი ნეონის წერტილი (Live Indicator) -->
+                <span class="flex h-2 w-2 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                </span>
+            </div>
+            <p class="text-rose-600/60 text-[10px] uppercase tracking-widest mb-4 flex-shrink-0">Cavea Cinemas Live Feed [SECURE_IP]</p>
+            
+            <!-- ქარდების სკროლადი ბლოკი მობილურისთვის და დესკტოპისთვის -->
+            <div class="grid grid-cols-2 gap-x-3.5 gap-y-7 overflow-y-auto pr-1 max-h-[250px] pt-6 pb-2">
+                
+                <!-- ქარდი 1: Toy Story 5 -->
+                <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950">
+                        <img src="https://images.unsplash.com/photo-1594787318286-3d835c1d207f?auto=format&fit=crop&w=100&q=80" 
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=TS5'" 
+                             alt="Toy Story 5" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Toy Story 5</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ვუდი და ბაზი ბრუნდებიან ახალი ტექნოლოგიური გამოწვევებით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">IMAX 3D • 18:00</span>
+                </div>
+
+                <!-- ქარდი 2: Scary Movie 6 -->
+                <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950">
+                        <img src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=100&q=80" 
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=SM6'" 
+                             alt="Scary Movie 6" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Scary Movie 6</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">საკულტო პაროდიული საშინელებათა ფრენჩაიზი ბრუნდება იუმორით.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">კომედია • 20:30</span>
+                </div>
+
+                <!-- ქარდი 3: Masters of the Universe -->
+                <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950">
+                        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=100&q=80" 
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=MOTU'" 
+                             alt="Masters of the Universe" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Masters of the Universe</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">პრინცი ადამი ბრუნდება ეტერნიას დასაცავად სკელეტორისგან.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">Dolby Atmos • 22:00</span>
+                </div>
+
+                <!-- ქარდი 4: Supergirl -->
+                <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950">
+                        <img src="https://images.unsplash.com/photo-1531259683007-016a7b628fc3?auto=format&fit=crop&w=100&q=80" 
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=SG'" 
+                             alt="Supergirl" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Supergirl</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">კარა ზორ-ელი მოგზაურობს კოსმოსში სამართლიანობისთვის.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">ფენტეზი • 19:15</span>
+                </div>
+
+            </div>
+        </div>
+        <button onclick="playClickBeep(); closeSubMenu('movies');"
+                class="w-full py-3 bg-gradient-to-r from-rose-600 to-pink-600 rounded-xl font-bold uppercase tracking-widest text-xs shadow-md mt-4 flex-shrink-0">
+            COMMIT_SELECTION
+        </button>
+    </div>
+
+    <!-- აქტივობების მენიუ -->
+    <div id="sub-activities"
+         class="hidden absolute inset-0 bg-[#120005]/95 p-6 flex-col justify-between z-20 rounded-3xl border border-rose-500/30 shadow-2xl backdrop-blur-2xl">
+        <button onclick="playClickBeep(); closeSubMenu('activities');"
+                class="absolute top-4 left-4 text-rose-400 hover:text-rose-200 text-xs tracking-wider flex items-center gap-1 font-mono cursor-pointer">
+            [← BACK]
+        </button>
+        <div class="mt-8 flex-1 flex flex-col overflow-hidden">
+            <h3 class="text-lg font-bold text-rose-400 uppercase tracking-widest mb-1">> ALLOCATE_OPERATIONS</h3>
+            <p class="text-rose-600/60 text-[10px] uppercase tracking-widest mb-4">Select Target Atmospheric Parameters</p>
+            
+            <div class="grid grid-cols-2 gap-x-3.5 gap-y-7 overflow-y-auto pr-1 max-h-[250px] pt-6 pb-2">
+                <!-- Bowling -->
+                <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🎳
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Bowling</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">გააგორეთ კინეტიკური სფეროები ნეონურ არენაზე.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">ACTIVE • COMPETITIVE</span>
+                </div>
+
+                <!-- Billiards -->
+                <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🎱
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Billiards</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ტაქტიკური და წყნარი თამაში სასიამოვნო გარემოში.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">FOCUS • CHILL</span>
+                </div>
+
+                <!-- PS5 Gaming -->
+                <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🎮
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">PS5 Lounge</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ულტრა 4K ეკრანები და VIP კომფორტული სავარძლები.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">VIP • INTERACTIVE</span>
+                </div>
+
+                <!-- Park Stroll -->
+                <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🚶
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Park Walk</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">მშვიდი და ესთეტიკური გასეირნება მატრიცულ ბილიკებზე.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">ROMANTIC • CALM</span>
+                </div>
+
+                <!-- Horse Riding -->
+                <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
+                     class="select-card relative pt-6 pb-2.5 px-2.5 rounded-2xl cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950/40 hover:border-rose-500/40">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-11 h-11 rounded-full overflow-hidden border border-rose-500/30 flex items-center justify-center shadow-lg bg-zinc-950 text-xl">
+                        🐴
+                    </div>
+                    <h4 class="text-[10px] font-bold text-rose-300 uppercase tracking-wide truncate">Horse Riding</h4>
+                    <p class="text-[8px] text-zinc-400/80 mt-1 leading-normal line-clamp-2 h-[24px]">ულამაზესი მთის ხედები და კეთილშობილი ცხენები.</p>
+                    <span class="block text-[7.5px] text-emerald-400 font-mono mt-1 uppercase tracking-wider font-bold">OUTDOOR • EPIC</span>
+                </div>
+            </div>
+        </div>
+        <button onclick="playClickBeep(); closeSubMenu('activities');"
+                class="w-full py-3 bg-gradient-to-r from-rose-600 to-pink-600 rounded-xl font-bold uppercase tracking-widest text-xs shadow-md mt-4 flex-shrink-0">
+            COMMIT_SELECTION
+        </button>
+    </div>
+
+</div>
+
+<!-- 3D WEBGL ENGINE & LOGIC -->
+<script>
+    // ================== THREE.JS 3D ENGINE (მორფინგული ნაწილაკები) ==================
+    const canvas3D = document.getElementById('webgl-canvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+    const renderer = new THREE.WebGLRenderer({canvas: canvas3D, alpha: true, antialias: true});
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.position.z = 700;
+
+    const numParticles = 75000;
+    const particleGeometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(numParticles * 3);
+
+    // მორფინგის სამიზნე კოორდინატების მასივები
+    const targets = {
+        0: new Float32Array(numParticles * 3), // Warp Space
+        1: new Float32Array(numParticles * 3), // Spherical Galaxy + Accretion Disk
+        2: new Float32Array(numParticles * 3), // Terrain / Wave Wave
+        3: new Float32Array(numParticles * 3)  // Cosmic Ring
+    };
+
+    // 1. Warp Space კოორდინატები
+    for (let i = 0; i < numParticles; i++) {
+        targets[0][i * 3] = (Math.random() - 0.5) * 800;
+        targets[0][i * 3 + 1] = (Math.random() - 0.5) * 800;
+        targets[0][i * 3 + 2] = (Math.random() - 0.5) * 2000;
+    }
+
+    // 2. Spherical Galaxy კოორდინატები
+    for (let i = 0; i < numParticles; i++) {
+        if (i < numParticles * 0.35) {
+            // ცენტრალური სფერო
+            const r = Math.random() * 80;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos((Math.random() * 2) - 1);
+            targets[1][i * 3] = r * Math.sin(phi) * Math.cos(theta);
+            targets[1][i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+            targets[1][i * 3 + 2] = r * Math.cos(phi);
+        } else {
+            // სპირალური აკრეციული დისკო
+            const r = 100 + Math.pow(Math.random(), 1.5) * 450;
+            const arms = 3;
+            const armAngle = (i % arms) * ((Math.PI * 2) / arms);
+            const theta = r * 0.015 + armAngle + (Math.random() - 0.5) * 0.3;
+            targets[1][i * 3] = r * Math.cos(theta);
+            targets[1][i * 3 + 1] = (Math.random() - 0.5) * 15 * (1.0 - r / 550);
+            targets[1][i * 3 + 2] = r * Math.sin(theta);
+        }
+    }
+
+    // 3. Wavy Terrain / Grid კოორდინატები
+    for (let i = 0; i < numParticles; i++) {
+        const x = (Math.random() - 0.5) * 1200;
+        const z = (Math.random() - 0.5) * 1200;
+        const dist = Math.sqrt(x * x + z * z);
+        const y = Math.sin(dist * 0.02) * 50 * Math.exp(-dist * 0.001);
+        targets[2][i * 3] = x;
+        targets[2][i * 3 + 1] = y - 100;
+        targets[2][i * 3 + 2] = z;
+    }
+
+    // 4. Cosmic Ring კოორდინატები
+    for (let i = 0; i < numParticles; i++) {
+        const r = 260 + (Math.random() - 0.5) * 60;
+        const theta = Math.random() * Math.PI * 2;
+        const rawX = r * Math.cos(theta);
+        const rawY = (Math.random() - 0.5) * 12;
+        const rawZ = r * Math.sin(theta);
+
+        // დახრილი რგოლი 3D სივრცეში
+        targets[3][i * 3] = rawX;
+        targets[3][i * 3 + 1] = rawY * Math.cos(Math.PI / 6) - rawZ * Math.sin(Math.PI / 6);
+        targets[3][i * 3 + 2] = rawY * Math.sin(Math.PI / 6) + rawZ * Math.cos(Math.PI / 6);
+    }
+
+    // საწყისი პოზიციების ინიციალიზაცია (Warp State)
+    for (let i = 0; i < numParticles * 3; i++) {
+        positions[i] = targets[0][i];
+    }
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    // კრისტალური მბზინავი წრეების ტექსტურა
+    function createGlowTexture() {
+        const c = document.createElement('canvas');
+        c.width = 16;
+        c.height = 16;
+        const ctx = c.getContext('2d');
+        const grad = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
+        grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        grad.addColorStop(0.3, 'rgba(255, 23, 68, 0.8)');
+        grad.addColorStop(0.6, 'rgba(255, 64, 129, 0.15)');
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 16, 16);
+        return new THREE.CanvasTexture(c);
+    }
+
+    const particleMaterial = new THREE.PointsMaterial({
+        size: 1.8,
+        map: createGlowTexture(),
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        sizeAttenuation: true
+    });
+
+    const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particleSystem);
+
+    let activeState = 0;
+    let morphSpeed = 0.055;
+    let autoRotationSpeed = 0.002;
+    let mouseX = 0, mouseY = 0;
+    let targetXRot = 0, targetYRot = 0;
+
+    // მაუსის მოძრაობის მიდევნება
+    document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    // სენსორული ეკრანების მხარდაჭერა (Touch)
+    document.addEventListener('touchmove', (e) => {
+        if (e.touches.length > 0) {
+            mouseX = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
+            mouseY = (e.touches[0].clientY / window.innerHeight - 0.5) * 2;
+        }
+    });
+
+    function setParticleTargetState(stateId) {
+        activeState = stateId;
+    }
+
+    // ძირითადი ანიმაციური ლუპი
+    let warpSpeedZ = 0;
+
+    function render3D() {
+        requestAnimationFrame(render3D);
+
+        const posAttr = particleGeometry.attributes.position;
+        const curPositions = posAttr.array;
+        const targetPositions = targets[activeState];
+
+        // ჰიპერსივრცული ფრენის ზუმირების ეფექტი
+        if (activeState === 0) {
+            warpSpeedZ += 3.8;
+            if (warpSpeedZ > 2000) warpSpeedZ = 0;
+        }
+
+        // ნაწილაკების პოზიციების გლუვი მორფინგი (Lerp)
+        for (let i = 0; i < numParticles; i++) {
+            let tx = targetPositions[i * 3];
+            let ty = targetPositions[i * 3 + 1];
+            let tz = targetPositions[i * 3 + 2];
+
+            if (activeState === 0) {
+                // Warp მოძრაობა Z-ღერძზე
+                tz += warpSpeedZ;
+                if (tz > 1000) tz -= 2000;
+            }
+
+            curPositions[i * 3] += (tx - curPositions[i * 3]) * morphSpeed;
+            curPositions[i * 3 + 1] += (ty - curPositions[i * 3 + 1]) * morphSpeed;
+            curPositions[i * 3 + 2] += (tz - curPositions[i * 3 + 2]) * morphSpeed;
+        }
+        posAttr.needsUpdate = true;
+
+        // სისტემური ბრუნვები სხვადასხვა სლაიდისთვის
+        if (activeState === 1) {
+            particleSystem.rotation.y += autoRotationSpeed;
+        } else if (activeState === 2) {
+            particleSystem.rotation.y = Math.sin(Date.now() * 0.0002) * 0.4;
+        } else {
+            particleSystem.rotation.y += 0.001;
+        }
+
+        // კამერის გლუვი გადახრა ინტერაქციისას (LERP)
+        targetXRot += (mouseY * 0.35 - targetXRot) * 0.05;
+        targetYRot += (mouseX * 0.35 - targetYRot) * 0.05;
+        camera.position.x = Math.sin(targetYRot) * 700;
+        camera.position.y = Math.sin(targetXRot) * 700;
+        camera.position.z = Math.cos(targetYRot) * Math.cos(targetXRot) * 700;
+        camera.lookAt(scene.position);
+
+        renderer.render(scene, camera);
+    }
+
+    // ეკრანის ზომის დინამიური ცვლილება
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // 3D სტარტი
+    render3D();
+
+
+    // ================== ორიგინალი ფუნქციონალი და ლოგიკა ==================
+    const selections = {
+        date: '',
+        time: '6:00 PM',
+        food: [],
+        movies: [],
+        activities: []
+    };
+
+    const rainContainer = document.getElementById('emoji-rain');
+    let currentGender = '';
+    let spawnIntervalId = null;
+
+    const crystalShapes = [
+        `<svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="url(#crystal-grad)" stroke="rgba(255, 23, 68, 0.9)" stroke-width="1.2" stroke-linejoin="round"/><line x1="12" y1="5" x2="12" y2="18" stroke="rgba(255,23,68,0.4)" stroke-dasharray="2 2" stroke-width="1"/></svg>`,
+        `<svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L14.8 9.2L22 12L14.8 14.8L12 22L9.2 14.8L2 12L9.2 9.2L12 2z" fill="url(#crystal-grad)" stroke="rgba(255, 23, 68, 0.9)" stroke-width="1.2" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.5" fill="#ff4081"/></svg>`,
+        `<svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 22,8 22,18 12,24 2,18 2,8" fill="url(#crystal-grad)" stroke="rgba(255, 23, 68, 0.9)" stroke-width="1.2"/><path d="M12 2v20M2 8h20M2 18h20" stroke="rgba(255, 255, 255, 0.15)" stroke-width="0.8"/></svg>`,
+        `<svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 2L2 8L12 22L22 8L18 2H6Z" fill="url(#crystal-grad)" stroke="rgba(255, 23, 68, 0.9)" stroke-width="1.2" stroke-linejoin="round"/><path d="M6 2L12 8L18 2" stroke="rgba(255, 23, 68, 0.9)" stroke-width="1.2"/><path d="M2 8H22" stroke="rgba(255, 23, 68, 0.9)" stroke-width="1.2"/><path d="M12 8V22" stroke="rgba(255, 23, 68, 0.9)" stroke-width="1.2"/></svg>`
+    ];
+
+    const crystalShapesRed = [
+        `<svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 5L5 19M5 5L19 19" stroke="#ff0044" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        `<svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6L18 18" stroke="#ff0505" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.5" fill="#ff0000" filter="drop-shadow(0 0 6px #ff0000)"/></svg>`,
+        `<svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 5L5 19M5 5L19 19" stroke="#ff1a1a" stroke-width="3.5" stroke-linecap="round"/><path d="M17 5L5 17M7 5L19 17" stroke="rgba(255, 0, 0, 0.85)" stroke-width="2.5"/></svg>`,
+        `<svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="4" stroke="rgba(255, 0, 0, 0.7)" stroke-width="2.5"/><path d="M16 8L8 16M8 8L16 16" stroke="#ff0000" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+    ];
+
+    function spawnEmojisContinuous() {
+        if (spawnIntervalId) {
+            clearInterval(spawnIntervalId);
+        }
+
+        const initialCount = currentGender === 'male' ? 45 : 22;
+        for (let i = 0; i < initialCount; i++) {
+            createEmojiDrop(true);
+        }
+
+        const spawnSpeed = currentGender === 'male' ? 250 : 800;
+        spawnIntervalId = setInterval(() => {
+            createEmojiDrop(false);
+        }, spawnSpeed);
+    }
+
+    function createEmojiDrop(isInitial) {
+        const emoji = document.createElement('div');
+        emoji.className = 'falling-emoji';
+
+        let shapesSource = currentGender === 'male' ? crystalShapesRed : crystalShapes;
+        const shapeHtml = shapesSource[Math.floor(Math.random() * shapesSource.length)];
+        emoji.innerHTML = shapeHtml;
+
+        if (currentGender === 'male') {
+            emoji.style.filter = 'drop-shadow(0 0 10px #ff0000) drop-shadow(0 0 20px #ff0044)';
+        } else {
+            emoji.style.filter = 'drop-shadow(0 0 15px rgba(255, 23, 68, 0.95))';
+        }
+
+        emoji.style.left = Math.random() * 100 + 'vw';
+
+        const sizeVal = Math.random() * (34 - 18) + 18;
+        emoji.style.width = sizeVal + 'px';
+        emoji.style.height = sizeVal + 'px';
+
+        const minDur = currentGender === 'male' ? 3 : 9;
+        const maxDur = currentGender === 'male' ? 6 : 16;
+        const duration = Math.random() * (maxDur - minDur) + minDur;
+        emoji.style.animationDuration = duration + 's';
+
+        if (isInitial) {
+            emoji.style.animationDelay = '-' + (Math.random() * duration) + 's';
+        }
+
+        rainContainer.appendChild(emoji);
+
+        if (!isInitial) {
+            setTimeout(() => emoji.remove(), duration * 1000);
+        }
+    }
+
+    // Web Audio API კიბერნეტიკული ხმების გენერატორი
+    let audioCtx;
+
+    function initAudio() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
+
+    function playSound(freq, type, duration) {
+        try {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type || 'sine';
+            osc.frequency.setValueAtTime(freq || 800, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        } catch (e) {
+        }
+    }
+
+    function playClickBeep() {
+        playSound(1200, 'sine', 0.15);
+    }
+
+    function playSelectBeep() {
+        playSound(800, 'triangle', 0.2);
+    }
+
+    // გენდერის არჩევის ლოგიკა
+    function handleGenderSelect(gender) {
+        currentGender = gender;
+        playClickBeep();
+
+        rainContainer.innerHTML = '';
+        spawnEmojisContinuous();
+
+        if (gender === 'female') {
+            document.getElementById('progress-container').classList.remove('hidden');
+            nextSlide(1);
+        } else {
+            const mainCard = document.getElementById('main-card');
+            mainCard.classList.add('premium-glass-lockout', 'lockout-theme');
+            document.getElementById('card-corners').classList.add('lockout-corners');
+            nextSlide('lockout');
+        }
+    }
+
+    function terminateApplication() {
+        playSound(150, 'sawtooth', 1.5);
+        document.body.style.background = '#000000';
+        document.body.innerHTML = `
+            <div class="flex flex-col items-center justify-center min-h-screen text-red-500 font-mono p-6 gap-3">
+                <p class="tracking-widest animate-pulse">[SYSTEM_ALERT] TERMINATING OPERATIONAL SYSTEM...</p>
+                <p class="text-xs text-zinc-600">CONNECTION_TERMINATED_BY_HOST (CODE 0)</p>
+                <p class="text-xs text-zinc-600">PROCESS_EXIT_COMPLETED. GOODBYE, OPERATOR.</p>
+            </div>
+        `;
+    }
+
+    const noBtn = document.getElementById('no-btn');
+    const yesBtn = document.getElementById('yes-btn');
+
+    noBtn.addEventListener('mouseenter', triggerNoEvasion);
+    noBtn.addEventListener('mousemove', triggerNoEvasion);
+    noBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        triggerNoEvasion();
+    });
+
+    function triggerNoEvasion() {
+        playSound(300, 'sawtooth', 0.08); // playEvasionSound inline
+        noBtn.classList.add('opacity-0', 'pointer-events-none');
+        noBtn.style.opacity = '0';
+        noBtn.style.pointerEvents = 'none';
+    }
+
+    yesBtn.addEventListener('click', () => {
+        playSound(1500, 'triangle', 0.5);
+        triggerFireworks();
+        setTimeout(() => {
+            nextSlide(2);
+        }, 800);
+    });
+
+    function triggerFireworks() {
+        const fxContainer = document.getElementById('fireworks');
+        const colors = ['#ff1744', '#ff4081', '#ffccd5', '#5c001a', '#ffffff'];
+        const cyberSymbols = ['1', '0', '{ }', '[ ]', '< >', 'SYS', 'OK', 'YES'];
+
+        for (let i = 0; i < 70; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = '50vw';
+            particle.style.top = '50vh';
+            particle.style.color = colors[Math.floor(Math.random() * colors.length)];
+            particle.innerText = cyberSymbols[Math.floor(Math.random() * cyberSymbols.length)];
+
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * (260 - 60) + 60;
+            particle.style.setProperty('--mx', Math.cos(angle) * velocity + 'px');
+            particle.style.setProperty('--my', Math.sin(angle) * velocity + 'px');
+
+            fxContainer.appendChild(particle);
+            setTimeout(() => particle.remove(), 1300);
+        }
+    }
+
+    // === TELEGRAM CONFIGURATION ===
+    // ჩასვით აქ თქვენი პირადი მონაცემები:
+    const TELEGRAM_BOT_TOKEN = '8979475165:AAGp9aoKsPdUBt_iIqHVey59SXX1HOadSP0';
+    const TELEGRAM_CHAT_ID = '5905838491';
+
+    // ფუნქცია ტელეგრამში შეტყობინების გასაგზავნად
+    async function sendTelegramNotification() {
+        if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === 'YOUR_BOT_TOKEN' || !TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === 'YOUR_CHAT_ID') {
+            console.log('[TELEGRAM] ბოტის ტოკენი ან ჩატის აიდი არ არის შევსებული.');
+            return;
+        }
+
+        // ტექსტის დაფორმატება ულამაზეს Markdown ფორმატში
+        const messageText = `💖 *ახალი პაემნის მოთხოვნა!* 💖\n\n` +
+            `📅 *თარიღი & დრო:* \`${selections.date} @ ${selections.time}\`\n` +
+            `🍔 *საჭმელი:* \`${selections.food.length > 0 ? selections.food.map(f => f.replace(/[^\w\s\u10D0-\u10FA]/g, '').trim()).join(', ') : '--'}\`\n` +
+            `🎬 *ფილმი:* \`${selections.movies.length > 0 ? selections.movies[0] : '--'}\`\n` +
+            `🏔️ *აქტივობები:* \`${selections.activities.length > 0 ? selections.activities.map(a => a.replace(/[^\w\s\u10D0-\u10FA]/g, '').trim()).join(', ') : '--'}\`\n\n` +
+            `⚡ _მონაცემები წარმატებით იქნა დამუშავებული!_`;
+
+        try {
+            const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: messageText,
+                    parse_mode: 'Markdown'
+                })
+            });
+
+            if (response.ok) {
+                console.log('[TELEGRAM] შეტყობინება წარმატებით გაიგზავნა!');
+            } else {
+                console.error('[TELEGRAM] გაგზავნის შეცდომა:', await response.text());
+            }
+        } catch (error) {
+            console.error('[TELEGRAM] კავშირის შეცდომა:', error);
+        }
+    }
+
+    // სლაიდების გადართვის მართვა + 3D მორფინგის ტრიგერი
+    function nextSlide(slideNumber) {
+        document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+        document.getElementById(`slide-${slideNumber}`).classList.add('active');
+
+        // === ვიდეოს მუსიკის დინამიური მართვა ===
+        const slide1Video = document.getElementById('slide-1-video');
+        if (slide1Video) {
+            if (slideNumber === 1) {
+                slide1Video.muted = false; // ჩავრთოთ ხმა
+                slide1Video.play().catch(e => console.log("ავტომატური გაშვება შეიზღუდა: ", e));
+            } else {
+                slide1Video.muted = true;  // გავთიშოთ ხმა
+                slide1Video.pause();       // დავაპაუზოთ ვიდეო რესურსების დასაზოგად
+            }
+        }
+        // =====================================
+
+        // WebGL ნაწილაკების მდგომარეობის მორფინგი სლაიდების მიხედვით
+        if (slideNumber === 0) {
+            setParticleTargetState(0); // Warp Space
+        } else if (slideNumber === 1) {
+            setParticleTargetState(1); // Galaxy Sphere
+            autoRotationSpeed = 0.003;
+        } else if (slideNumber === 2) {
+            setParticleTargetState(1); // Galaxy Sphere (ტრიალებს ბევრად სწრაფად ემოციის გამოსახატად!)
+            autoRotationSpeed = 0.035;
+        } else if (slideNumber === 3) {
+            setParticleTargetState(2); // Terrain Waves
+        } else if (slideNumber === 4) {
+            setParticleTargetState(3); // Cosmic Ring
+        } else if (slideNumber === 5) {
+            setParticleTargetState(1); // აბრუნებს გალაქტიკის მშვიდ მდგომარეობაში
+            autoRotationSpeed = 0.0015;
+            // გააგზავნოს ტელეგრამში
+            sendTelegramNotification();
+        } else if (slideNumber === 'lockout') {
+            setParticleTargetState(0); // Warp Space (წითელი განგაშის იმიტაციით)
+        }
+
+        // პროგრესის წერტილების განახლება
+        if (slideNumber !== 0 && slideNumber !== 'lockout') {
+            document.querySelectorAll('.dot').forEach((dot, idx) => {
+                if (idx < slideNumber) {
+                    dot.style.backgroundColor = '#ff1744';
+                    dot.style.opacity = '1';
+                    dot.style.boxShadow = '0 0 10px #ff1744';
+                } else {
+                    dot.style.backgroundColor = '#ffffff';
+                    dot.style.opacity = '0.2';
+                    dot.style.boxShadow = 'none';
+                }
+            });
+        }
+    }
+
+    function hideDateError() {
+        document.getElementById('date-error').classList.add('hidden');
+    }
+
+    function saveDateTime() {
+        const dateVal = document.getElementById('date-input').value;
+        const timeVal = document.getElementById('time-input').value;
+
+        if (!dateVal) {
+            playSound(300, 'sawtooth', 0.2);
+            document.getElementById('date-error').classList.remove('hidden');
+            return;
+        }
+
+        hideDateError();
+        selections.date = dateVal;
+        selections.time = timeVal;
+        nextSlide(4);
+    }
+
+    // ქვემენიუების გახსნა/დახურვა
+    function openSubMenu(category) {
+        document.getElementById(`sub-${category}`).classList.remove('hidden');
+    }
+
+    function closeSubMenu(category) {
+        document.getElementById(`sub-${category}`).classList.add('hidden');
+        validateHubState();
+    }
+
+    function toggleSelection(element, category) {
+        element.classList.toggle('selected');
+        const titleEl = element.querySelector('h4');
+        const item = titleEl ? titleEl.innerText : element.innerText;
+        const index = selections[category].indexOf(item);
+        if (index > -1) {
+            selections[category].splice(index, 1);
+        } else {
+            selections[category].push(item);
+        }
+    }
+
+    function toggleSingleSelection(element, category) {
+        element.parentNode.querySelectorAll('.select-card').forEach(c => c.classList.remove('selected'));
+        element.classList.add('selected');
+        const titleEl = element.querySelector('h4');
+        selections[category] = [titleEl ? titleEl.innerText : element.innerText];
+    }
+
+    function validateHubState() {
+        updateHubStatusText('food', selections.food);
+        updateHubStatusText('movies', selections.movies);
+        updateHubStatusText('activities', selections.activities);
+
+        const hasAtLeastOne = selections.food.length > 0 || selections.movies.length > 0 || selections.activities.length > 0;
+        const nextBtn = document.getElementById('final-hub-next');
+
+        if (hasAtLeastOne) {
+            nextBtn.removeAttribute('disabled');
+            nextBtn.className = "w-full mt-4 px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold rounded-xl uppercase tracking-widest text-xs transition-all hover:scale-[1.02] shadow-lg shadow-rose-500/30 cursor-pointer border border-rose-400/20";
+            buildSummaryReport();
+        } else {
+            nextBtn.setAttribute('disabled', 'true');
+            nextBtn.className = "w-full mt-4 px-6 py-3 bg-zinc-950/40 text-zinc-600 font-bold rounded-xl uppercase tracking-widest text-xs transition-all cursor-not-allowed border border-zinc-900";
+        }
+    }
+
+    // სტატუსის ტექსტების განახლება
+    function updateHubStatusText(id, array) {
+        const statusEl = document.getElementById(`status-${id}`);
+        const parentEl = document.getElementById(`hub-${id}`);
+        if (array.length > 0) {
+            statusEl.innerText = array.join(', ');
+            statusEl.className = "text-[9px] text-emerald-400 font-bold truncate max-w-full text-center mt-1";
+            parentEl.style.borderColor = "rgba(16, 185, 129, 0.6)";
+            parentEl.style.boxShadow = "0 0 20px rgba(16, 185, 129, 0.25)";
+        } else {
+            statusEl.innerText = "Pending";
+            statusEl.className = "text-[9px] text-zinc-500 mt-1 truncate max-w-full text-center";
+            parentEl.style.borderColor = "rgba(255, 255, 255, 0.1)";
+            parentEl.style.boxShadow = "none";
+        }
+    }
+
+    function buildSummaryReport() {
+        document.getElementById('sum-datetime').innerText = `${selections.date} @ ${selections.time}`;
+        document.getElementById('sum-food').innerText = selections.food.length > 0 ? selections.food.map(f => f.replace(/[^\w\s\u10D0-\u10FA]/g, '').trim()).join(', ') : '--';
+        document.getElementById('sum-movie').innerText = selections.movies.length > 0 ? selections.movies[0] : '--';
+        document.getElementById('sum-activities').innerText = selections.activities.length > 0 ? selections.activities.map(a => a.replace(/[^\w\s\u10D0-\u10FA]/g, '').trim()).join(', ') : '--';
+    }
+
+    spawnEmojisContinuous();
+</script>
+</body>
+</html>
