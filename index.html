@@ -434,6 +434,33 @@
             transition: left 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.2s, box-shadow 0.2s;
             will-change: left, top, opacity, transform;
         }
+
+        /* CRT Screen Power-Off / Terminal Shutdown Animation */
+        @keyframes crtPowerOff {
+            0% {
+                transform: scale(1, 1);
+                filter: brightness(1);
+                opacity: 1;
+            }
+            35% {
+                transform: scale(1, 0.003);
+                filter: brightness(3.5) contrast(2);
+                opacity: 0.95;
+            }
+            70% {
+                transform: scale(0.005, 0.003);
+                filter: brightness(6);
+                opacity: 0.85;
+            }
+            100% {
+                transform: scale(0, 0);
+                opacity: 0;
+            }
+        }
+        .crt-shutdown {
+            animation: crtPowerOff 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body class="min-h-screen text-white flex items-center justify-center p-3 sm:p-4">
@@ -719,12 +746,10 @@
             </div>
         </div>
 
-        <div class="flex gap-3 sm:gap-4 w-full mt-2 relative z-10">
-            <button onclick="copyEncryptedInvite()" class="flex-1 py-2.5 sm:py-3 bg-zinc-950/80 hover:bg-zinc-900 border border-rose-500/40 hover:border-emerald-500/60 rounded-xl font-bold text-[9px] sm:text-[10px] tracking-widest uppercase transition-all shadow-md text-rose-300 hover:text-emerald-300 cursor-pointer text-crisp">
-                COPY_INVITE 🔗
-            </button>
-            <button onclick="shareWhatsApp()" class="flex-1 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-600 to-emerald-800 hover:from-emerald-500 hover:to-emerald-700 font-bold rounded-xl tracking-widest text-[9px] sm:text-[10px] uppercase text-white border border-emerald-500/50 shadow-md cursor-pointer transition-all text-crisp">
-                SHARE_WHATSAPP 💬
+        <div class="w-full mt-2 relative z-10">
+            <button id="deal-btn" onclick="closeAppDeal()" 
+                    class="w-full py-3 sm:py-3.5 bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 hover:from-emerald-500 hover:to-teal-400 text-white font-black rounded-xl uppercase tracking-[0.2em] text-xs sm:text-sm border border-emerald-400/80 shadow-[0_0_25px_rgba(16,185,129,0.5)] hover:shadow-[0_0_35px_rgba(16,185,129,0.8)] transition-all duration-300 cursor-pointer transform hover:scale-[1.01] active:scale-[0.98] text-crisp flex items-center justify-center gap-2">
+                <span>DEAL 🤝</span>
             </button>
         </div>
     </div>
@@ -865,52 +890,76 @@
             <p class="text-rose-400 text-[8px] sm:text-[9px] font-semibold uppercase tracking-widest mb-3 flex-shrink-0">Cavea Cinemas Live Feed [SECURE_IP]</p>
             
             <div class="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-3.5 sm:gap-y-7 overflow-y-auto pr-1 max-h-[48vh] sm:max-h-[250px] pt-5 pb-2 custom-scrollbar">
-                <!-- Card 1: Toy Story 5 -->
+                <!-- Card 1: დიგერი -->
                 <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
                      class="select-card relative pt-5 sm:pt-6 pb-2.5 px-2 rounded-2xl cursor-pointer">
                     <div class="absolute -top-4 sm:-top-5 left-1/2 -translate-x-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-rose-500/40 flex items-center justify-center shadow-lg bg-zinc-950">
-                        <img src="https://images.unsplash.com/photo-1594787318286-3d835c1d207f?auto=format&fit=crop&w=100&q=80" 
-                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=TS5'" alt="Toy Story 5" class="w-full h-full object-cover">
+                        <img src="https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=100&q=80" 
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=DIGGER'" alt="დიგერი" class="w-full h-full object-cover">
                     </div>
-                    <h4 class="text-[9px] sm:text-[10px] font-bold text-rose-200 uppercase tracking-wide truncate text-crisp">Toy Story 5</h4>
-                    <p class="text-[7.5px] sm:text-[8px] text-zinc-200 mt-1 leading-normal line-clamp-2 h-[22px] sm:h-[24px] font-medium">ვუდი და ბაზი ბრუნდებიან ახალი ტექნოლოგიური გამოწვევებით.</p>
-                    <span class="block text-[7px] sm:text-[7.5px] text-emerald-300 font-mono mt-1 uppercase tracking-wider font-bold">IMAX 3D • 18:00</span>
+                    <h4 class="text-[9px] sm:text-[10px] font-bold text-rose-200 uppercase tracking-wide truncate text-crisp">დიგერი</h4>
+                    <p class="text-[7.5px] sm:text-[8px] text-zinc-200 mt-1 leading-normal line-clamp-2 h-[22px] sm:h-[24px] font-medium">დრამატული თავგადასავალი და დაძაბული ისტორია.</p>
+                    <span class="block text-[7px] sm:text-[7.5px] text-emerald-300 font-mono mt-1 uppercase tracking-wider font-bold">IMAX • 2h 8m</span>
                 </div>
 
-                <!-- Card 2: Scary Movie 6 -->
+                <!-- Card 2: არასწორი დაქალები -->
+                <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
+                     class="select-card relative pt-5 sm:pt-6 pb-2.5 px-2 rounded-2xl cursor-pointer">
+                    <div class="absolute -top-4 sm:-top-5 left-1/2 -translate-x-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-rose-500/40 flex items-center justify-center shadow-lg bg-zinc-950">
+                        <img src="https://images.unsplash.com/photo-1543807535-eceef0bc6599?auto=format&fit=crop&w=100&q=80" 
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=DAKALEBI'" alt="არასწორი დაქალები" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[9px] sm:text-[10px] font-bold text-rose-200 uppercase tracking-wide truncate text-crisp">არასწორი დაქალები</h4>
+                    <p class="text-[7.5px] sm:text-[8px] text-zinc-200 mt-1 leading-normal line-clamp-2 h-[22px] sm:h-[24px] font-medium">მხიარული და გიჟური კომედია მეგობრებზე.</p>
+                    <span class="block text-[7px] sm:text-[7.5px] text-emerald-300 font-mono mt-1 uppercase tracking-wider font-bold">COMEDY • 1h 37m</span>
+                </div>
+
+                <!-- Card 3: Avengers: Endgame Encore -->
+                <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
+                     class="select-card relative pt-5 sm:pt-6 pb-2.5 px-2 rounded-2xl cursor-pointer">
+                    <div class="absolute -top-4 sm:-top-5 left-1/2 -translate-x-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-rose-500/40 flex items-center justify-center shadow-lg bg-zinc-950">
+                        <img src="https://images.unsplash.com/photo-1635863138275-d9b33299680b?auto=format&fit=crop&w=100&q=80" 
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=AVENGERS'" alt="Avengers: Endgame Encore" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-[9px] sm:text-[10px] font-bold text-rose-200 uppercase tracking-wide truncate text-crisp">Avengers: Endgame Encore</h4>
+                    <p class="text-[7.5px] sm:text-[8px] text-zinc-200 mt-1 leading-normal line-clamp-2 h-[22px] sm:h-[24px] font-medium">მარველის საკულტო ეპიკური ბრძოლა დიდ ეკრანზე.</p>
+                    <span class="block text-[7px] sm:text-[7.5px] text-emerald-300 font-mono mt-1 uppercase tracking-wider font-bold">IMAX 3D • 3h 5m</span>
+                </div>
+
+                <!-- Card 4: ბოროტების სავანე -->
                 <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
                      class="select-card relative pt-5 sm:pt-6 pb-2.5 px-2 rounded-2xl cursor-pointer">
                     <div class="absolute -top-4 sm:-top-5 left-1/2 -translate-x-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-rose-500/40 flex items-center justify-center shadow-lg bg-zinc-950">
                         <img src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=100&q=80" 
-                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=SM6'" alt="Scary Movie 6" class="w-full h-full object-cover">
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=EVIL'" alt="ბოროტების სავანე" class="w-full h-full object-cover">
                     </div>
-                    <h4 class="text-[9px] sm:text-[10px] font-bold text-rose-200 uppercase tracking-wide truncate text-crisp">Scary Movie 6</h4>
-                    <p class="text-[7.5px] sm:text-[8px] text-zinc-200 mt-1 leading-normal line-clamp-2 h-[22px] sm:h-[24px] font-medium">საკულტო პაროდიული საშინელებათა ფრენჩაიზი ბრუნდება იუმორით.</p>
-                    <span class="block text-[7px] sm:text-[7.5px] text-emerald-300 font-mono mt-1 uppercase tracking-wider font-bold">კომედია • 20:30</span>
+                    <h4 class="text-[9px] sm:text-[10px] font-bold text-rose-200 uppercase tracking-wide truncate text-crisp">ბოროტების სავანე</h4>
+                    <p class="text-[7.5px] sm:text-[8px] text-zinc-200 mt-1 leading-normal line-clamp-2 h-[22px] sm:h-[24px] font-medium">მისტიკური საშინელებათა თრილერი ბნელ გარემოში.</p>
+                    <span class="block text-[7px] sm:text-[7.5px] text-emerald-300 font-mono mt-1 uppercase tracking-wider font-bold">ScreenX • 1h 30m</span>
                 </div>
 
-                <!-- Card 3: Masters of the Universe -->
+                <!-- Card 5: მხეცის გული -->
                 <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
                      class="select-card relative pt-5 sm:pt-6 pb-2.5 px-2 rounded-2xl cursor-pointer">
                     <div class="absolute -top-4 sm:-top-5 left-1/2 -translate-x-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-rose-500/40 flex items-center justify-center shadow-lg bg-zinc-950">
                         <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=100&q=80" 
-                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=MOTU'" alt="Masters of the Universe" class="w-full h-full object-cover">
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=BEAST'" alt="მხეცის გული" class="w-full h-full object-cover">
                     </div>
-                    <h4 class="text-[9px] sm:text-[10px] font-bold text-rose-200 uppercase tracking-wide truncate text-crisp">Masters of the Universe</h4>
-                    <p class="text-[7.5px] sm:text-[8px] text-zinc-200 mt-1 leading-normal line-clamp-2 h-[22px] sm:h-[24px] font-medium">პრინცი ადამი ბრუნდება ეტერნიას დასაცავად სკელეტორისგან.</p>
-                    <span class="block text-[7px] sm:text-[7.5px] text-emerald-300 font-mono mt-1 uppercase tracking-wider font-bold">Dolby Atmos • 22:00</span>
+                    <h4 class="text-[9px] sm:text-[10px] font-bold text-rose-200 uppercase tracking-wide truncate text-crisp">მხეცის გული</h4>
+                    <p class="text-[7.5px] sm:text-[8px] text-zinc-200 mt-1 leading-normal line-clamp-2 h-[22px] sm:h-[24px] font-medium">ემოციური და ღრმა ფსიქოლოგიური დრამა.</p>
+                    <span class="block text-[7px] sm:text-[7.5px] text-emerald-300 font-mono mt-1 uppercase tracking-wider font-bold">DRAMA • 1h 41m</span>
                 </div>
 
-                <!-- Card 4: Supergirl -->
+                <!-- Card 6: Twilight (ბინდი) -->
                 <div onclick="playSelectBeep(); toggleSingleSelection(this, 'movies');"
                      class="select-card relative pt-5 sm:pt-6 pb-2.5 px-2 rounded-2xl cursor-pointer">
                     <div class="absolute -top-4 sm:-top-5 left-1/2 -translate-x-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-rose-500/40 flex items-center justify-center shadow-lg bg-zinc-950">
-                        <img src="https://images.unsplash.com/photo-1531259683007-016a7b628fc3?auto=format&fit=crop&w=100&q=80" 
-                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=SG'" alt="Supergirl" class="w-full h-full object-cover">
+                        <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=100&q=80" 
+                             onerror="this.src='https://placehold.co/80x80/120005/ff1744?text=TWILIGHT'" alt="Twilight (ბინდი)" class="w-full h-full object-cover">
                     </div>
-                    <h4 class="text-[9px] sm:text-[10px] font-bold text-rose-200 uppercase tracking-wide truncate text-crisp">Supergirl</h4>
-                    <p class="text-[7.5px] sm:text-[8px] text-zinc-200 mt-1 leading-normal line-clamp-2 h-[22px] sm:h-[24px] font-medium">კარა ზორ-ელი მოგზაურობს კოსმოსში სამართლიანობისთვის.</p>
-                    <span class="block text-[7px] sm:text-[7.5px] text-emerald-300 font-mono mt-1 uppercase tracking-wider font-bold">ფენტეზი • 19:15</span>
+                    <h4 class="text-[9px] sm:text-[10px] font-bold text-rose-200 uppercase tracking-wide truncate text-crisp">Twilight (ბინდი)</h4>
+                    <p class="text-[7.5px] sm:text-[8px] text-zinc-200 mt-1 leading-normal line-clamp-2 h-[22px] sm:h-[24px] font-medium">საკულტო რომანტიკული ისტორია ვამპირებზე.</p>
+                    <span class="block text-[7px] sm:text-[7.5px] text-emerald-300 font-mono mt-1 uppercase tracking-wider font-bold">ROMANCE • 2h 2m</span>
                 </div>
             </div>
         </div>
@@ -985,6 +1034,28 @@
                     <p class="text-[7.5px] sm:text-[8px] text-zinc-200 mt-1 leading-normal line-clamp-2 h-[22px] sm:h-[24px] font-medium">ულამაზესი მთის ხედები და კეთილშობილი ცხენები.</p>
                     <span class="block text-[7px] sm:text-[7.5px] text-emerald-300 font-mono mt-1 uppercase tracking-wider font-bold">OUTDOOR • EPIC</span>
                 </div>
+
+                <!-- Shooting Range -->
+                <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
+                     class="select-card relative pt-5 sm:pt-6 pb-2.5 px-2 rounded-2xl cursor-pointer">
+                    <div class="absolute -top-4 sm:-top-5 left-1/2 -translate-x-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-rose-500/40 flex items-center justify-center shadow-lg bg-zinc-950 text-lg sm:text-xl">
+                        🎯
+                    </div>
+                    <h4 class="text-[9px] sm:text-[10px] font-bold text-rose-200 uppercase tracking-wide truncate text-crisp">Shooting Range • სროლა</h4>
+                    <p class="text-[7.5px] sm:text-[8px] text-zinc-200 mt-1 leading-normal line-clamp-2 h-[22px] sm:h-[24px] font-medium">ადრენალინი და სამიზნეში ზუსტი გასროლები ტირში.</p>
+                    <span class="block text-[7px] sm:text-[7.5px] text-emerald-300 font-mono mt-1 uppercase tracking-wider font-bold">ADRENALINE • FOCUS</span>
+                </div>
+
+                <!-- Spa & Relaxation -->
+                <div onclick="playSelectBeep(); toggleSelection(this, 'activities');"
+                     class="select-card relative pt-5 sm:pt-6 pb-2.5 px-2 rounded-2xl cursor-pointer">
+                    <div class="absolute -top-4 sm:-top-5 left-1/2 -translate-x-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-rose-500/40 flex items-center justify-center shadow-lg bg-zinc-950 text-lg sm:text-xl">
+                        🧖‍♀️
+                    </div>
+                    <h4 class="text-[9px] sm:text-[10px] font-bold text-rose-200 uppercase tracking-wide truncate text-crisp">Spa & Relaxation • სპა</h4>
+                    <p class="text-[7.5px] sm:text-[8px] text-zinc-200 mt-1 leading-normal line-clamp-2 h-[22px] sm:h-[24px] font-medium">სარელაქსაციო მასაჟი, საუნა და სრული განტვირთვა.</p>
+                    <span class="block text-[7px] sm:text-[7.5px] text-emerald-300 font-mono mt-1 uppercase tracking-wider font-bold">CHILL • RELAX</span>
+                </div>
             </div>
         </div>
         <button onclick="playClickBeep(); closeSubMenu('activities');"
@@ -993,6 +1064,37 @@
         </button>
     </div>
 
+</div>
+
+<!-- Terminal Shutdown / Power-off CRT Overlay -->
+<div id="shutdown-overlay" class="fixed inset-0 bg-black z-50 pointer-events-none opacity-0 transition-opacity duration-700 flex flex-col items-center justify-center text-center p-4 sm:p-6 select-none" style="display: none;">
+    <div class="relative max-w-sm sm:max-w-md w-full p-6 sm:p-8 rounded-3xl border border-emerald-500/50 bg-zinc-950/95 shadow-[0_0_60px_rgba(16,185,129,0.35)] flex flex-col items-center gap-4">
+        <!-- Glowing Hologram Indicator -->
+        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-emerald-400 bg-emerald-950/60 flex items-center justify-center text-3xl sm:text-4xl shadow-[0_0_30px_rgba(16,185,129,0.6)] animate-pulse">
+            🤝
+        </div>
+
+        <div class="space-y-1.5 sm:space-y-2">
+            <div class="text-[10px] sm:text-xs font-mono font-bold tracking-[0.3em] text-emerald-400 uppercase">
+                MISSION_ACCOMPLISHED
+            </div>
+            <h1 class="text-xl sm:text-2xl font-black tracking-wider text-white uppercase drop-shadow-[0_0_12px_rgba(16,185,129,0.8)]">
+                SEE YOU THERE 💖
+            </h1>
+            <p class="text-[9px] sm:text-[10px] text-zinc-400 font-mono tracking-widest uppercase">
+                [ CONNECTION_TERMINATED_SUCCESSFULLY ]
+            </p>
+        </div>
+
+        <div class="w-full my-1 h-1 bg-zinc-900 rounded-full overflow-hidden border border-emerald-900/60">
+            <div class="h-full bg-emerald-500 w-full shadow-[0_0_12px_#10b981]"></div>
+        </div>
+
+        <div class="text-[8px] sm:text-[9px] font-mono text-emerald-400/80 tracking-widest uppercase flex items-center gap-1.5">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+            SYS_STANDBY // AUDIO_OFFLINE // DEEP_SLEEP
+        </div>
+    </div>
 </div>
 
 <!-- 3D WEBGL ENGINE & FULL REFACTORED APPLICATION LOGIC -->
@@ -1156,9 +1258,10 @@
     }
 
     let warpSpeedZ = 0;
+    let animationFrameId = null;
 
     function render3D() {
-        requestAnimationFrame(render3D);
+        animationFrameId = requestAnimationFrame(render3D);
 
         const posAttr = particleGeometry.attributes.position;
         const curPositions = posAttr.array;
@@ -2093,6 +2196,75 @@
         playSound(1100, 'triangle', 0.2);
         const text = encodeURIComponent(getShareText());
         window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+    }
+
+    // =========================================================================
+    // APPLICATION TERMINATION HANDLER (DEAL CONFIRMATION)
+    // =========================================================================
+    function closeAppDeal() {
+        // 1. Play futuristic final confirmation sound chime sequence
+        try {
+            initAudio();
+            playSound(587.33, 'sine', 0.16);
+            setTimeout(() => playSound(880, 'sine', 0.2), 90);
+            setTimeout(() => playSound(1174.66, 'sine', 0.45), 200);
+        } catch (e) {}
+
+        // 2. Disable DEAL button to prevent duplicate triggers
+        const dealBtn = document.getElementById('deal-btn');
+        if (dealBtn) {
+            dealBtn.disabled = true;
+            dealBtn.classList.add('opacity-75', 'cursor-not-allowed');
+        }
+
+        // 3. Gracefully fade out background music and stop playback
+        const bgAudio = document.getElementById('bg-music');
+        if (bgAudio) {
+            const fadeStep = 0.08;
+            const fadeInterval = setInterval(() => {
+                if (bgAudio.volume > fadeStep) {
+                    bgAudio.volume = Math.max(0, bgAudio.volume - fadeStep);
+                } else {
+                    bgAudio.volume = 0;
+                    bgAudio.pause();
+                    clearInterval(fadeInterval);
+                }
+            }, 55);
+        }
+
+        // 4. Cleanly stop Three.js render loop to conserve device memory & battery
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+
+        // Stop falling emoji rain loop
+        if (typeof spawnIntervalId !== 'undefined' && spawnIntervalId) {
+            clearInterval(spawnIntervalId);
+            spawnIntervalId = null;
+        }
+        const emojiRain = document.getElementById('emoji-rain');
+        if (emojiRain) {
+            emojiRain.style.transition = 'opacity 0.6s ease';
+            emojiRain.style.opacity = '0';
+        }
+
+        // 5. Trigger CRT power-off screen collapse on the interface
+        const mainCard = document.getElementById('main-card');
+        if (mainCard) {
+            mainCard.classList.add('crt-shutdown');
+        }
+
+        // 6. Smoothly reveal the final terminal shutdown confirmation screen
+        const overlay = document.getElementById('shutdown-overlay');
+        if (overlay) {
+            overlay.style.display = 'flex';
+            overlay.style.pointerEvents = 'auto';
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                overlay.classList.add('opacity-100');
+            }, 300);
+        }
     }
 
     // =========================================================================
